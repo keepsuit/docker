@@ -1,0 +1,5 @@
+#!/bin/sh
+
+s6-setuidgid nginx
+
+nginx -g 'daemon off;'
