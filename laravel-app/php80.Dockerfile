@@ -24,7 +24,7 @@ RUN ln -sf /dev/stdout /var/log/nginx/access.log \
 	&& ln -sf /dev/stderr /var/log/nginx/error.log
 
 RUN rm -rf /etc/nginx/conf.d/*
-COPY nginx /etc/nginx
+COPY nginx/ /etc/nginx/
 
 RUN cp "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" \
   && rm /usr/local/etc/php-fpm.d/zz-docker.conf
