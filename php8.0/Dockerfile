@@ -9,7 +9,7 @@ ADD https://raw.githubusercontent.com/mlocati/docker-php-extension-installer/mas
 RUN chmod uga+x /usr/local/bin/install-php-extensions \
     && install-php-extensions \
         bcmath \
-#        gd \
+        exif \
         gettext \
         gmp \
         intl \
@@ -17,11 +17,12 @@ RUN chmod uga+x /usr/local/bin/install-php-extensions \
         opcache \
         pcntl \
         pdo_mysql \
-#        soap \
-        zip \
-#        imagick \
-        exif \
-        redis
+        swoole \
+        redis \
+        zip
+#        gd
+#        imagick
+#        soap
 
 COPY conf.d $PHP_INI_DIR/conf.d/
 COPY php-fpm.d /usr/local/etc/php-fpm.d
