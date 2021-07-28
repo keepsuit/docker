@@ -24,7 +24,9 @@ RUN ln -sf /dev/stdout /var/log/nginx/access.log \
 	&& ln -sf /dev/stderr /var/log/nginx/error.log
 
 RUN rm -rf /etc/nginx/conf.d/*
-COPY nginx/ /etc/nginx/
+COPY nginx/nginx.conf /etc/nginx/nginx.conf
+COPY nginx/conf.d /etc/nginx/conf.d
+COPY nginx/sites-available /etc/nginx/sites-available
 
 RUN cp "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" \
   && rm /usr/local/etc/php-fpm.d/zz-docker.conf
@@ -41,6 +43,7 @@ COPY scripts /scripts
 
 RUN mkdir -p /etc/services.d \
     && mkdir -p /etc/nginx/sites-enabled \
+    && mkdir -p /etc/supercronic \
     && chmod +x /scripts/* \
     && echo '* * * * * cd /app && php artisan schedule:run >> /dev/null 2>&1' > /etc/supercronic/crontab
 
