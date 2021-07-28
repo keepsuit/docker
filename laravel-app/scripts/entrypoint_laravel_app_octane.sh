@@ -9,8 +9,8 @@ set -e
 
 /scripts/runtime_cache.sh
 
-ln -s /etc/service-available/nginx /etc/services.d/nginx
-ln -s /etc/service-available/octane /etc/services.d/octane
-ln -s /etc/nginx/sites-enabled/octane.conf /etc/nginx/sites-available/default.conf
+ln -s /etc/services-available/nginx /etc/services.d/nginx
+ln -s /etc/services-available/octane /etc/services.d/octane
+ln -s /etc/nginx/sites-available/octane.conf /etc/nginx/sites-enabled/default.conf
 
 /init

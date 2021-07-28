@@ -9,8 +9,8 @@ set -e
 
 /scripts/runtime_cache.sh
 
-ln -s /etc/service-available/nginx /etc/services.d/nginx
-ln -s /etc/service-available/php-fpm /etc/services.d/php-fpm
-ln -s /etc/nginx/sites-enabled/php-fpm.conf /etc/nginx/sites-available/default.conf
+ln -s /etc/services-available/nginx /etc/services.d/nginx
+ln -s /etc/services-available/php-fpm /etc/services.d/php-fpm
+ln -s /etc/nginx/sites-available/php-fpm.conf /etc/nginx/sites-enabled/default.conf
 
 /init
