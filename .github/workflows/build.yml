@@ -37,9 +37,9 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-base-${{ matrix.tag }}-${{ github.sha }}
+          key: ${{ runner.os }}-buildx-laravel-app-${{ matrix.tag }}-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-buildx-base-${{ matrix.tag }}
+            ${{ runner.os }}-buildx-laravel-app-${{ matrix.tag }}
 
       - name: Build docker image
         uses: docker/build-push-action@v2
