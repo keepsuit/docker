@@ -1,6 +1,6 @@
 FROM twentyweb/cms-base:8.0
 
-RUN install-php-extensions swoole
+RUN install-php-extensions swoole grpc protobuf
 
 RUN apk add --no-cache mysql-client \
   nginx \
