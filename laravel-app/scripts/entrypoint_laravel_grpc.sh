@@ -11,4 +11,7 @@ set -e
 
 cd /app
 
-php artisan grpc:start
+HOST=${HOST:-}
+PORT=${PORT:-9090}
+
+php artisan grpc:start --host=$HOST --port=$PORT -n
