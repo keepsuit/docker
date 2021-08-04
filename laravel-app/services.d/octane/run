@@ -2,4 +2,9 @@
 
 s6-setuidgid www-data
 
-php artisan octane:start -n
+if [ -n "$WATCH" ]; then
+  php artisan octane:start --watch -n
+else
+  /scripts/runtime_cache.sh
+  php artisan octane:start -n
+fi

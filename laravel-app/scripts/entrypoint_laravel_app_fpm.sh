@@ -7,8 +7,6 @@ fi
 
 set -e
 
-/scripts/runtime_cache.sh
-
 ln -sf /etc/services-available/nginx /etc/services.d/nginx
 ln -sf /etc/services-available/php-fpm /etc/services.d/php-fpm
 ln -sf /etc/nginx/sites-available/php-fpm.conf /etc/nginx/sites-enabled/default.conf

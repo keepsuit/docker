@@ -2,4 +2,8 @@
 
 s6-setuidgid www-data
 
+if [ -z "$WATCH" ]; then
+  /scripts/runtime_cache.sh
+fi
+
 php-fpm --nodaemonize
