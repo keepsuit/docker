@@ -2,9 +2,13 @@
 
 s6-setuidgid www-data
 
+HOST=${HOST:-}
+PORT=${PORT:-8000}
+WORKERS=${WORKERS:-auto}
+
 if [ -n "$WATCH" ]; then
-  php artisan octane:start --watch -n
+  php artisan octane:start --host=$HOST --port=$PORT --workers=1 --watch -n
 else
   /scripts/runtime_cache.sh
-  php artisan octane:start -n
+  php artisan octane:start --host=$HOST --port=$PORT --workers=$WORKERS -n
 fi

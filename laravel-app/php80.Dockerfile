@@ -50,7 +50,7 @@ RUN mkdir -p /etc/services.d \
     && mkdir -p /etc/supercronic \
     && chmod +x /scripts/* \
     && ln -s /scripts/entrypoint_laravel_app_fpm.sh /scripts/entrypoint_laravel_app.sh \
-    && echo '* * * * * cd /app && php artisan schedule:run >> /dev/null 2>&1' > /etc/supercronic/crontab
+    && echo '* * * * * cd /app && php artisan schedule:run' > /etc/supercronic/crontab
 
 EXPOSE 80
 
