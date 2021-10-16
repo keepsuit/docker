@@ -7,8 +7,8 @@ fi
 
 set -e
 
-ln -sf /etc/services-available/nginx /etc/services.d/nginx
+/scripts/reset_services.sh
+
 ln -sf /etc/services-available/octane /etc/services.d/octane
-ln -sf /etc/nginx/sites-available/octane.conf /etc/nginx/sites-enabled/default.conf
 
 /init

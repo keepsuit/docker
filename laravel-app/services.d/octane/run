@@ -3,7 +3,7 @@
 s6-setuidgid www-data
 
 HOST=${HOST:-}
-PORT=${PORT:-8000}
+PORT=${PORT:-80}
 WORKERS=${WORKERS:-auto}
 
 cd /app

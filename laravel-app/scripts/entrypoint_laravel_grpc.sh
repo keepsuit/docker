@@ -7,15 +7,8 @@ fi
 
 set -e
 
-cd /app
+/scripts/reset_services.sh
 
-HOST=${HOST:-}
-PORT=${PORT:-9090}
-WORKERS=${WORKERS:-auto}
+ln -sf /etc/services-available/grpc /etc/services.d/grpc
 
-if [ -n "$WATCH" ]; then
-  php artisan grpc:start --host=$HOST --port=$PORT --workers=1 --watch -n
-else
-  /scripts/runtime_cache.sh
-  php artisan grpc:start --host=$HOST --port=$PORT --workers=$WORKERS -n
-fi
+/init

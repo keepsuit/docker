@@ -1,0 +1,16 @@
+#!/usr/bin/with-contenv sh
+
+s6-setuidgid www-data
+
+cd /app
+
+HOST=${HOST:-}
+PORT=${PORT:-9090}
+WORKERS=${WORKERS:-auto}
+
+if [ -n "$WATCH" ]; then
+  php artisan grpc:start --host=$HOST --port=$PORT --workers=1 --watch -n
+else
+  /scripts/runtime_cache.sh
+  php artisan grpc:start --host=$HOST --port=$PORT --workers=$WORKERS -n
+fi
