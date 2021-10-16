@@ -6,6 +6,8 @@ HOST=${HOST:-}
 PORT=${PORT:-8000}
 WORKERS=${WORKERS:-auto}
 
+cd /app
+
 if [ -n "$WATCH" ]; then
   php artisan octane:start --host=$HOST --port=$PORT --workers=1 --watch -n
 else
