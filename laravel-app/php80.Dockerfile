@@ -8,7 +8,8 @@ RUN apk add --no-cache mysql-client \
   nginx-mod-http-geoip \
   tzdata \
   curl \
-  ca-certificates
+  ca-certificates \
+  libc6-compat
 
 ENV SUPERCRONIC_URL=https://github.com/aptible/supercronic/releases/download/v0.1.12/supercronic-linux-amd64 \
     SUPERCRONIC=supercronic-linux-amd64 \
