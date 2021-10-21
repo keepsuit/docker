@@ -2,6 +2,7 @@
 
 cd /app
 
-php artisan config:cache || true
-php artisan route:cache || true
-php artisan view:cache || true
+php artisan config:cache -n || true
+php artisan route:cache -n || true
+php artisan view:cache -n || true
+php artisan lighthouse:cache -n || true

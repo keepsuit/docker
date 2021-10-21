@@ -7,7 +7,6 @@ fi
 
 set -e
 
-/scripts/runtime_cache.sh
 
 cd /app
 
@@ -20,7 +19,8 @@ MAX_JOBS=${MAX_JOBS:-0}
 MAX_TIME=${MAX_TIME:-0}
 
 if [ -n "$WATCH" ]; then
-  php artisan queue:listen --verbose --name=$NAME --queue=$QUEUE --tries=$TRIES --timeout=$TIMEOUT --max-jobs=$MAX_JOBS --max-time=$MAX_TIME $CONNECTION
+  php artisan queue:listen -v -n --name=$NAME --queue=$QUEUE --tries=$TRIES --timeout=$TIMEOUT $CONNECTION
 else
-  php artisan queue:work --verbose --name=$NAME --queue=$QUEUE --tries=$TRIES --timeout=$TIMEOUT --max-jobs=$MAX_JOBS --max-time=$MAX_TIME $CONNECTION
+  /scripts/runtime_cache.sh
+  php artisan queue:work -v -n --name=$NAME --queue=$QUEUE --tries=$TRIES --timeout=$TIMEOUT --max-jobs=$MAX_JOBS --max-time=$MAX_TIME $CONNECTION
 fi
