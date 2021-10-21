@@ -11,8 +11,8 @@ set -e
 cd /app
 
 CONNECTION=${CONNECTION:-}
-NAME=${NAME:-default}
-QUEUE=${QUEUE:-default}
+NAME=${NAME:-}
+QUEUE=${QUEUE:-}
 TRIES=${TRIES:-1}
 TIMEOUT=${TIMEOUT:-90}
 MAX_JOBS=${MAX_JOBS:-0}
