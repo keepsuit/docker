@@ -8,7 +8,7 @@ WORKERS=${WORKERS:-auto}
 
 cd /app
 
-if [ -n "$WATCH" ]; then
+if [ "$WATCH" == "true" ]; then
   php artisan octane:start --host=$HOST --port=$PORT --rpc-port=6001 --workers=1 --watch -n
 else
   /scripts/runtime_cache.sh

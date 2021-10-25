@@ -18,7 +18,7 @@ TIMEOUT=${TIMEOUT:-90}
 MAX_JOBS=${MAX_JOBS:-0}
 MAX_TIME=${MAX_TIME:-0}
 
-if [ -n "$WATCH" ]; then
+if [ "$WATCH" == "true" ]; then
   php artisan queue:listen -v -n --name=$NAME --queue=$QUEUE --tries=$TRIES --timeout=$TIMEOUT $CONNECTION
 else
   /scripts/runtime_cache.sh
