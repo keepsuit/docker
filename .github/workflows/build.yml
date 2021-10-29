@@ -15,7 +15,7 @@ jobs:
         include:
           - tag: '8.0'
             dockerfile: php80.Dockerfile
-            platforms: linux/amd64
+            platforms: linux/amd64,linux/arm64
 
     steps:
       - name: Checkout code
