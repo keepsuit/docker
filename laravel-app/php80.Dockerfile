@@ -1,6 +1,6 @@
 FROM twentyweb/cms-base:8.0
 
-RUN install-php-extensions swoole grpc protobuf
+# RUN install-php-extensions swoole grpc protobuf
 
 RUN apk add --no-cache mysql-client \
   nginx \
@@ -22,6 +22,8 @@ COPY nginx/sites-available /etc/nginx/sites-available
 RUN cp "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" \
   && rm /usr/local/etc/php-fpm.d/zz-docker.conf
 COPY php/conf.d $PHP_INI_DIR/conf.d
+
+ARG TARGETARCH
 
 ENV SUPERCRONIC_VERSION=v0.1.12
 RUN curl -sSL -o supercronic "https://github.com/aptible/supercronic/releases/download/${SUPERCRONIC_VERSION}/supercronic-linux-${TARGETARCH}" \
