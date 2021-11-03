@@ -38,7 +38,7 @@ RUN case ${TARGETARCH} in \
          "amd64")  S6_OVERLAY_ARCH=amd64  ;; \
          "arm64")  S6_OVERLAY_ARCH=aarch64  ;; \
     esac \
-  && curl -sSL -o s6-overlay-installer "https://github.com/just-containers/s6-overlay/releases/download/${S6_OVERLAY_VERSION}/s6-overlay-${TARGETARCH}-installer" \
+  && curl -sSL -o s6-overlay-installer "https://github.com/just-containers/s6-overlay/releases/download/${S6_OVERLAY_VERSION}/s6-overlay-${S6_OVERLAY_ARCH}-installer" \
   && chmod +x s6-overlay-installer \
   && ./s6-overlay-installer / \
   && rm -rf ./s6-overlay-installer
