@@ -1,4 +1,4 @@
-FROM twentyweb/cms-base:8.0
+FROM twentyweb/cms-base:8.1
 
 ARG TARGETARCH
 
