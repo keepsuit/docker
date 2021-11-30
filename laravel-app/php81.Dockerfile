@@ -2,10 +2,10 @@ FROM twentyweb/cms-base:8.1
 
 ARG TARGETARCH
 
-RUN install-php-extensions grpc protobuf \
+RUN install-php-extensions protobuf grpc \
     && apk add --no-cache binutils \
     && strip --strip-all /usr/local/lib/php/extensions/*/*.so \
-    && apk del binutils \
+    && apk del binutils
 
 RUN apk add --no-cache mysql-client \
     nginx \
