@@ -2,7 +2,7 @@ FROM twentyweb/cms-base:8.1
 
 ARG TARGETARCH
 
-RUN install-php-extensions protobuf-beta grpc \
+RUN install-php-extensions protobuf grpc \
     && apk add --no-cache binutils \
     && strip --strip-all /usr/local/lib/php/extensions/*/*.so \
     && apk del binutils
@@ -32,7 +32,7 @@ RUN curl -sSL -o supercronic "https://github.com/aptible/supercronic/releases/do
    && chmod +x supercronic \
    && mv supercronic /usr/local/bin/supercronic
 
-ENV GRPC_HEALTH_PROBE_VERSION=v0.4.6
+ENV GRPC_HEALTH_PROBE_VERSION=v0.4.8
 RUN curl -sSL -o grpc_health_probe "https://github.com/grpc-ecosystem/grpc-health-probe/releases/download/${GRPC_HEALTH_PROBE_VERSION}/grpc_health_probe-linux-${TARGETARCH}" \
     && chmod +x grpc_health_probe \
     && mv grpc_health_probe /usr/local/bin/grpc_health_probe
