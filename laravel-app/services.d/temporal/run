@@ -1,0 +1,16 @@
+#!/usr/bin/with-contenv sh
+
+s6-setuidgid www-data
+
+QUEUE=${QUEUE:-}
+MAX_JOBS=${MAX_JOBS:-}
+WORKERS=${WORKERS:-auto}
+
+cd /app
+
+if [ "$WATCH" == "true" ]; then
+  php artisan temporal:work ${QUEUE} --workers=1 --watch -n
+else
+  /scripts/runtime_cache.sh
+  php artisan temporal:work ${QUEUE} --workers=$WORKERS --max-jobs=${MAX_JOBS} -n
+fi
