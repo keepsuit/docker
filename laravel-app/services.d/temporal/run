@@ -3,14 +3,14 @@
 s6-setuidgid www-data
 
 QUEUE=${QUEUE:-}
-MAX_JOBS=${MAX_JOBS:-}
+MAX_JOBS=${MAX_JOBS:-500}
 WORKERS=${WORKERS:-auto}
 
 cd /app
 
 if [ "$WATCH" == "true" ]; then
-  php artisan temporal:work ${QUEUE} --workers=1 --watch -n
+  php artisan temporal:work ${QUEUE} --workers=1 --watch -v -n
 else
   /scripts/runtime_cache.sh
-  php artisan temporal:work ${QUEUE} --workers=$WORKERS --max-jobs=${MAX_JOBS} -n
+  php artisan temporal:work ${QUEUE} --workers=${WORKERS} --max-jobs=${MAX_JOBS} -v -n
 fi
