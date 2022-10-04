@@ -5,12 +5,13 @@ s6-setuidgid www-data
 QUEUE=${QUEUE:-}
 MAX_JOBS=${MAX_JOBS:-500}
 WORKERS=${WORKERS:-auto}
+RPC_PORT=${RPC_PORT:-6003}
 
 cd /app
 
 if [ "$WATCH" == "true" ]; then
-  php artisan temporal:work ${QUEUE} --workers=1 --watch -v -n
+  php artisan temporal:work ${QUEUE} --workers=1 --rpc-port=${RPC_PORT} --watch -v -n
 else
   /scripts/runtime_cache.sh
-  php artisan temporal:work ${QUEUE} --workers=${WORKERS} --max-jobs=${MAX_JOBS} -v -n
+  php artisan temporal:work ${QUEUE} --workers=${WORKERS} --max-jobs=${MAX_JOBS} --rpc-port=${RPC_PORT} -v -n
 fi

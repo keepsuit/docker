@@ -7,10 +7,11 @@ cd /app
 HOST=${HOST:-}
 PORT=${PORT:-9090}
 WORKERS=${WORKERS:-auto}
+RPC_PORT=${RPC_PORT:-6002}
 
 if [ "$WATCH" == "true" ]; then
-  php artisan grpc:start --host=$HOST --port=$PORT --rpc-port=6002 --workers=1 --watch -n
+  php artisan grpc:start --host=$HOST --port=$PORT --rpc-port=${RPC_PORT} --workers=1 --watch -n
 else
   /scripts/runtime_cache.sh
-  php artisan grpc:start --host=$HOST --port=$PORT --rpc-port=6002 --workers=$WORKERS -n
+  php artisan grpc:start --host=$HOST --port=$PORT --rpc-port=${RPC_PORT} --workers=$WORKERS -n
 fi
