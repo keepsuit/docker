@@ -1,4 +1,4 @@
-FROM twentyweb/cms-base:8.1 as php-extensions
+FROM twentyweb/cms-base:8.2 as php-extensions
 ENV PHP_PROTOBUF_VERSION=3.21.6
 ENV PHP_GRPC_VERSION=1.51.1
 RUN install-php-extensions protobuf-${PHP_PROTOBUF_VERSION} grpc-${PHP_GRPC_VERSION} \
@@ -7,7 +7,7 @@ RUN install-php-extensions protobuf-${PHP_PROTOBUF_VERSION} grpc-${PHP_GRPC_VERS
     && cp $(php-config --extension-dir)/protobuf.so /out/protobuf.so
 
 
-FROM twentyweb/cms-base:8.1
+FROM twentyweb/cms-base:8.2
 
 ARG TARGETARCH
 

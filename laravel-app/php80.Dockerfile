@@ -1,11 +1,14 @@
+FROM twentyweb/cms-base:8.0 as php-extensions
+ENV PHP_PROTOBUF_VERSION=3.21.6
+ENV PHP_GRPC_VERSION=1.51.1
+RUN install-php-extensions protobuf-${PHP_PROTOBUF_VERSION} grpc-${PHP_GRPC_VERSION} \
+    && mkdir -p /out \
+    && cp $(php-config --extension-dir)/grpc.so /out/grpc.so \
+    && cp $(php-config --extension-dir)/protobuf.so /out/protobuf.so
+
 FROM twentyweb/cms-base:8.0
 
 ARG TARGETARCH
-
-RUN install-php-extensions protobuf grpc \
-    && apk add --no-cache binutils \
-    && strip --strip-all /usr/local/lib/php/extensions/*/*.so \
-    && apk del binutils
 
 RUN apk add --no-cache mysql-client \
     nginx \
@@ -23,6 +26,10 @@ COPY nginx/nginx.conf /etc/nginx/nginx.conf
 COPY nginx/conf.d /etc/nginx/conf.d
 COPY nginx/sites-available /etc/nginx/sites-available
 
+COPY --from=php-extensions /out/*.so /tmp/extensions/
+RUN mv /tmp/extensions/*.so $(php-config --extension-dir)/ \
+  && docker-php-ext-enable protobuf grpc
+
 RUN cp "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" \
     && rm /usr/local/etc/php-fpm.d/zz-docker.conf
 COPY php/conf.d $PHP_INI_DIR/conf.d
@@ -32,7 +39,7 @@ RUN curl -sSL -o supercronic "https://github.com/aptible/supercronic/releases/do
     && chmod +x supercronic \
     && mv supercronic /usr/local/bin/supercronic
 
-ENV GRPC_HEALTH_PROBE_VERSION=v0.4.12
+ENV GRPC_HEALTH_PROBE_VERSION=v0.4.14
 RUN curl -sSL -o grpc_health_probe "https://github.com/grpc-ecosystem/grpc-health-probe/releases/download/${GRPC_HEALTH_PROBE_VERSION}/grpc_health_probe-linux-${TARGETARCH}" \
     && chmod +x grpc_health_probe \
     && mv grpc_health_probe /usr/local/bin/grpc_health_probe
