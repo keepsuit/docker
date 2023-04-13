@@ -1,7 +1,7 @@
 FROM twentyweb/cms-base:8.2 as php-extensions
 ENV PHP_PROTOBUF_VERSION=3.21.6
 ENV PHP_GRPC_VERSION=1.49.0
-RUN install-php-extensions protobuf-${PHP_PROTOBUF_VERSION} grpc-${PHP_GRPC_VERSION} \
+RUN install-php-extensions protobuf-${PHP_PROTOBUF_VERSION} grpc-${PHP_GRPC_VERSION} opentelemetry \
     && mkdir -p /out \
     && cp $(php-config --extension-dir)/grpc.so /out/grpc.so \
     && cp $(php-config --extension-dir)/protobuf.so /out/protobuf.so
@@ -29,7 +29,7 @@ COPY nginx/sites-available /etc/nginx/sites-available
 
 COPY --from=php-extensions /out/*.so /tmp/extensions/
 RUN mv /tmp/extensions/*.so $(php-config --extension-dir)/ \
-  && docker-php-ext-enable protobuf grpc
+    && docker-php-ext-enable protobuf grpc opentelemetry
 
 RUN cp "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" \
     && rm /usr/local/etc/php-fpm.d/zz-docker.conf
