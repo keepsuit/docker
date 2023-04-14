@@ -4,7 +4,9 @@ ENV PHP_GRPC_VERSION=1.49.0
 RUN install-php-extensions opentelemetry protobuf-${PHP_PROTOBUF_VERSION} grpc-${PHP_GRPC_VERSION} \
     && mkdir -p /out \
     && cp $(php-config --extension-dir)/grpc.so /out/grpc.so \
-    && cp $(php-config --extension-dir)/protobuf.so /out/protobuf.so
+    && cp $(php-config --extension-dir)/protobuf.so /out/protobuf.so \
+    && cp $(php-config --extension-dir)/opentelemetry.so /out/opentelemetry.so
+
 
 FROM twentyweb/cms-base:8.0
 
