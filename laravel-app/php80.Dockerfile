@@ -1,6 +1,6 @@
 FROM twentyweb/cms-base:8.0 as php-extensions
-ENV PHP_PROTOBUF_VERSION=3.22.3
-ENV PHP_GRPC_VERSION=1.49.0
+ENV PHP_PROTOBUF_VERSION=3.23.3
+ENV PHP_GRPC_VERSION=1.56.0
 RUN install-php-extensions opentelemetry protobuf-${PHP_PROTOBUF_VERSION} grpc-${PHP_GRPC_VERSION} \
     && mkdir -p /out \
     && cp $(php-config --extension-dir)/grpc.so /out/grpc.so \
@@ -36,12 +36,12 @@ RUN cp "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" \
     && rm /usr/local/etc/php-fpm.d/zz-docker.conf
 COPY php/conf.d $PHP_INI_DIR/conf.d
 
-ENV SUPERCRONIC_VERSION=v0.2.2
+ENV SUPERCRONIC_VERSION=v0.2.25
 RUN curl -sSL -o supercronic "https://github.com/aptible/supercronic/releases/download/${SUPERCRONIC_VERSION}/supercronic-linux-${TARGETARCH}" \
     && chmod +x supercronic \
     && mv supercronic /usr/local/bin/supercronic
 
-ENV GRPC_HEALTH_PROBE_VERSION=v0.4.17
+ENV GRPC_HEALTH_PROBE_VERSION=v0.4.19
 RUN curl -sSL -o grpc_health_probe "https://github.com/grpc-ecosystem/grpc-health-probe/releases/download/${GRPC_HEALTH_PROBE_VERSION}/grpc_health_probe-linux-${TARGETARCH}" \
     && chmod +x grpc_health_probe \
     && mv grpc_health_probe /usr/local/bin/grpc_health_probe
