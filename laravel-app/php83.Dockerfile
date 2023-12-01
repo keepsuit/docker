@@ -41,8 +41,8 @@ RUN apk add --no-cache mysql-client \
 RUN ln -s $(php -r 'echo ini_get("extension_dir");') /usr/lib/extensions
 
 COPY --from=php-extensions /out/*.so /usr/lib/extensions
-RUN echo "extension=protobuf.so" > /etc/php/8.3/mods-available/protobuf.ini && phpenmod protobuf \
-    && echo "extension=grpc.so" > /etc/php/8.3/mods-available/grpc.ini && phpenmod grpc
+RUN echo "extension=protobuf.so" > /etc/php83/conf.d/00_protobuf.ini \
+    && echo "extension=grpc.so" >  /etc/php83/conf.d/00_grpc.ini
 
 COPY unit/conf.json /var/lib/unit/conf.json
 
