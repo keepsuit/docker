@@ -19,16 +19,12 @@ jobs:
         include:
           - tag: '8.0'
             dockerfile: php80.Dockerfile
-            platforms: linux/amd64,linux/arm64
           - tag: '8.1'
             dockerfile: php81.Dockerfile
-            platforms: linux/amd64,linux/arm64
           - tag: '8.2'
             dockerfile: php82.Dockerfile
-            platforms: linux/amd64,linux/arm64
           - tag: '8.3'
             dockerfile: php83.Dockerfile
-            platforms: linux/amd64,linux/arm64
 
     steps:
       - name: Checkout code
@@ -59,7 +55,7 @@ jobs:
         with:
           context: ./laravel-app
           file: ./laravel-app/${{ matrix.dockerfile }}
-          platforms: ${{ matrix.platforms }}
+          platforms: linux/amd64,linux/arm64
           cache-from: |
             type=local,src=/tmp/.buildx-cache
             keepsuit/laravel-app:${{ matrix.tag }}

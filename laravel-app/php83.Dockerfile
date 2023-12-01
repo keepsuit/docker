@@ -7,10 +7,13 @@ RUN apk add --no-cache \
     autoconf \
     gcc \
     g++ \
+    libstdc++ \
+    linux-headers \
     make \
     musl-dev \
     php83-dev \
-    php83-pear
+    php83-pear \
+    zlib-dev
 
 ARG PROTOBUF_VERSION=3.25.1
 ARG GRPC_VERSION=1.60.0
