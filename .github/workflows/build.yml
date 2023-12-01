@@ -26,6 +26,9 @@ jobs:
           - tag: '8.2'
             dockerfile: php82.Dockerfile
             platforms: linux/amd64,linux/arm64
+          - tag: '8.3'
+            dockerfile: php83.Dockerfile
+            platforms: linux/amd64,linux/arm64
 
     steps:
       - name: Checkout code
