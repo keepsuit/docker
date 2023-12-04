@@ -17,19 +17,17 @@ RUN apk add --no-cache \
 
 ARG PROTOBUF_VERSION=3.25.1
 ARG GRPC_VERSION=1.60.0
-RUN pecl83 install protobuf-$PROTOBUF_VERSION \
-    && pecl83 install grpc-$GRPC_VERSION
+RUN pecl83 install protobuf-$PROTOBUF_VERSION
 
 RUN mkdir -p /out \
-    && cp $(php-config83 --extension-dir)/protobuf.so /out/protobuf.so \
-    && cp $(php-config83 --extension-dir)/grpc.so /out/grpc.so
+    && cp $(php-config83 --extension-dir)/protobuf.so /out/protobuf.so
 
 
 FROM twentyweb/cms-base:8.3
 ARG TARGETARCH
 
 RUN apk add --no-cache mysql-client \
-#    php83-pecl-grpc \
+    php83-pecl-grpc \
 #    php83-pecl-protobuf \
     php83-pecl-opentelemetry \
     unit \
@@ -41,8 +39,7 @@ RUN apk add --no-cache mysql-client \
 RUN ln -s $(php -r 'echo ini_get("extension_dir");') /usr/lib/extensions
 
 COPY --from=php-extensions /out/*.so /usr/lib/extensions
-RUN echo "extension=protobuf.so" > /etc/php83/conf.d/00_protobuf.ini \
-    && echo "extension=grpc.so" >  /etc/php83/conf.d/00_grpc.ini
+RUN echo "extension=protobuf.so" > /etc/php83/conf.d/00_protobuf.ini
 
 COPY unit/conf.json /var/lib/unit/conf.json
 
