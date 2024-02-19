@@ -74,6 +74,7 @@ RUN mkdir -p /etc/services.d \
     && chmod +x /scripts/* \
     && rm -rf /scripts/entrypoint_laravel_app_fpm.sh \
     && ln -s /scripts/entrypoint_laravel_app_unit.sh /scripts/entrypoint_laravel_app.sh \
+    && sed -i 's/www-data/unit/g' /scripts/prepare_laravel.sh \
     && echo '* * * * * cd /app && php artisan schedule:run' > /etc/supercronic/crontab
 
 EXPOSE 80
