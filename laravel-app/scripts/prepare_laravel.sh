@@ -1,7 +1,10 @@
 #!/bin/sh
 
-# Fix: telescope requires cache connection on registration
+# Fixes
+# - telescope requires cache connection on registration
+# - docker set OTEL_TRACES_EXPORTER in build context
 export TELESCOPE_ENABLED=false
+export OTEL_TRACES_EXPORTER=null
 
 mkdir -p storage/app/public && \
 mkdir -p storage/backups && \
