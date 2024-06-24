@@ -51,7 +51,7 @@ jobs:
             ${{ runner.os }}-buildx-laravel-app-${{ matrix.tag }}
 
       - name: Build docker image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: ./laravel-app
           file: ./laravel-app/${{ matrix.dockerfile }}
