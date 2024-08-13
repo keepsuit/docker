@@ -24,9 +24,7 @@ RUN install-php-extensions \
     sqlite3 \
     xsl
 
-RUN apt-get update \
-    && apt-get install -y ffmpeg \
-    && apt-get clean
+RUN docker-php-serversideup-dep-install-debian ffmpeg
 
 COPY --chmod=755 serversideup/etc/ /etc/
 

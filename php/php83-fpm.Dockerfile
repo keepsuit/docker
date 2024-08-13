@@ -24,8 +24,7 @@ RUN install-php-extensions \
     sqlite3 \
     xsl
 
-RUN apk update \
-    && apk add --no-cache ffmpeg
+RUN docker-php-serversideup-dep-install-alpine ffmpeg
 
 COPY --chmod=755 serversideup/etc/ /etc/
 
