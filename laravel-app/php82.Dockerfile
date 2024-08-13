@@ -1,4 +1,4 @@
-FROM twentyweb/cms-base:8.2 as php-extensions
+FROM twentyweb/cms-base:8.2 AS php-extensions
 ENV PHP_PROTOBUF_VERSION=3.23.3
 ENV PHP_GRPC_VERSION=1.56.0
 RUN install-php-extensions opentelemetry protobuf-${PHP_PROTOBUF_VERSION} grpc-${PHP_GRPC_VERSION} \

@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM twentyweb/cms-base:8.3 as php-extensions
+FROM twentyweb/cms-base:8.3 AS php-extensions
 ARG TARGETPLATFORM
 
 RUN apk add --no-cache \
@@ -28,7 +28,7 @@ ARG TARGETARCH
 
 RUN apk add --no-cache mysql-client \
     php83-pecl-grpc \
-#    php83-pecl-protobuf \
+    #    php83-pecl-protobuf \
     php83-pecl-opentelemetry \
     unit \
     unit-php83 \

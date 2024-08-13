@@ -16,8 +16,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - tag: "8.0"
-            dockerfile: php80.Dockerfile
           - tag: "8.1"
             dockerfile: php81.Dockerfile
           - tag: "8.2"
