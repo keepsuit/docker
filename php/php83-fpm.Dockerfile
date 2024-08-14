@@ -27,6 +27,7 @@ RUN install-php-extensions \
 RUN docker-php-serversideup-dep-install-alpine ffmpeg
 
 COPY --chmod=755 serversideup/etc/ /etc/
+RUN docker-php-serversideup-s6-init
 
 USER www-data
 WORKDIR /app
