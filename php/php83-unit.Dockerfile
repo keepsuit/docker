@@ -26,7 +26,7 @@ RUN install-php-extensions \
 
 RUN docker-php-serversideup-dep-install-debian ffmpeg
 
-COPY --chmod=755 serversideup/etc/ /etc/
+COPY --chmod=755 common/ /
 
 USER www-data
 WORKDIR /app
