@@ -27,7 +27,16 @@ RUN install-php-extensions \
 RUN docker-php-serversideup-dep-install-alpine ffmpeg
 
 COPY --chmod=755 serversideup/etc/ /etc/
-RUN docker-php-serversideup-s6-init
+
+RUN rm -rf /etc/s6-overlay/s6-rc.d/user/contents.d/0-container-info \
+    && rm -rf /etc/s6-overlay/s6-rc.d/user/contents.d/1-debug-mode \
+    && rm -rf /etc/s6-overlay/s6-rc.d/user/contents.d/10-init-webserver-config \
+    && rm -rf /etc/s6-overlay/s6-rc.d/user/contents.d/49-prepare-laravel \
+    && rm -rf /etc/s6-overlay/s6-rc.d/user/contents.d/50-laravel-automations \
+    && echo "" > /etc/s6-overlay/s6-rc.d/php-fpm/dependencies
+
+ENTRYPOINT ["docker-php-serversideup-entrypoint"]
+CMD ["/init"]
 
 USER www-data
 WORKDIR /app
