@@ -12,8 +12,5 @@ if [ -f "$APP_BASE_DIR/artisan" ]; then
 
     chmod ug+wx -R storage bootstrap
 
-    # Fix: telescope requires cache connection on registration
-    export TELESCOPE_ENABLED=false
-
     php artisan package:discover
 fi
