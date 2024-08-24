@@ -24,7 +24,7 @@ RUN install-php-extensions \
     sqlite3 \
     xsl
 
-RUN docker-php-serversideup-dep-install-alpine ffmpeg mysql-client
+RUN docker-php-serversideup-dep-install-alpine "ffmpeg mysql-client"
 
 COPY --chmod=755 common/ /
 
