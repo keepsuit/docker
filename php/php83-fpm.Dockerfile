@@ -1,6 +1,7 @@
 # syntax=docker/dockerfile:1
 
-FROM serversideup/php:8.3-fpm-nginx-alpine
+ARG IMAGE_VERSION=v3.4.0-beta1
+FROM serversideup/php:8.3-fpm-nginx-alpine-${IMAGE_VERSION}
 
 USER root
 
@@ -27,15 +28,6 @@ RUN install-php-extensions \
 RUN docker-php-serversideup-dep-install-alpine "ffmpeg mysql-client"
 
 COPY --chmod=755 common/ /
-
-RUN rm -rf /etc/s6-overlay/s6-rc.d/user/contents.d/0-container-info \
-    && rm -rf /etc/s6-overlay/s6-rc.d/user/contents.d/1-debug-mode \
-    && rm -rf /etc/s6-overlay/s6-rc.d/user/contents.d/10-init-webserver-config \
-    && rm -rf /etc/s6-overlay/s6-rc.d/user/contents.d/50-laravel-automations \
-    && echo "" > /etc/s6-overlay/s6-rc.d/php-fpm/dependencies
-
-ENTRYPOINT ["docker-php-serversideup-entrypoint"]
-CMD ["/init"]
 
 USER www-data
 WORKDIR /app

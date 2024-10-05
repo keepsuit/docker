@@ -1,6 +1,7 @@
 # syntax=docker/dockerfile:1
 
-FROM serversideup/php:8.3-unit
+ARG IMAGE_VERSION=v3.4.0-beta1
+FROM serversideup/php:8.3-unit-${IMAGE_VERSION}
 
 USER root
 
