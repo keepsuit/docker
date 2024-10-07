@@ -27,6 +27,8 @@ RUN install-php-extensions \
 
 RUN docker-php-serversideup-dep-install-alpine "ffmpeg mysql-client"
 
+RUN sed -i 's/exit 0/return 0/g' /etc/entrypoint.d/10-init-webserver-config.sh
+
 COPY --chmod=755 common/ /
 
 USER www-data
