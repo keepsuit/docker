@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-ARG IMAGE_VERSION=v3.4.0-beta1
+ARG IMAGE_VERSION=v3.4.0-beta2
 FROM serversideup/php:8.3-fpm-nginx-alpine-${IMAGE_VERSION}
 
 USER root
@@ -26,8 +26,6 @@ RUN install-php-extensions \
     xsl
 
 RUN docker-php-serversideup-dep-install-alpine "ffmpeg mysql-client"
-
-RUN sed -i 's/exit 0/return 0/g' /etc/entrypoint.d/10-init-webserver-config.sh
 
 COPY --chmod=755 common/ /
 
