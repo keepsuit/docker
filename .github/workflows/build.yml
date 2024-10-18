@@ -37,24 +37,14 @@ jobs:
           username: cappuc
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
 
-      - name: Cache Docker layers
-        uses: actions/cache@v4
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-laravel-app-${{ matrix.tag }}-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-laravel-app-${{ matrix.tag }}
-
       - name: Build docker image
         uses: docker/build-push-action@v6
         with:
           context: ./laravel-app
           file: ./laravel-app/${{ matrix.dockerfile }}
           platforms: linux/amd64,linux/arm64
-          cache-from: |
-            type=local,src=/tmp/.buildx-cache
-            keepsuit/laravel-app:${{ matrix.tag }}
-          cache-to: type=local,dest=/tmp/.buildx-cache,mode=all
+          cache-from: type=gha,scope=laravel-app-${{ matrix.tag }}
+          cache-to: type=gha,scope=laravel-app-${{ matrix.tag }},mode=max
           push: true
           tags: |
             keepsuit/laravel-app:${{ matrix.tag }}
@@ -87,24 +77,14 @@ jobs:
           username: cappuc
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
 
-      - name: Cache Docker layers
-        uses: actions/cache@v4
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-php-${{ matrix.tag }}-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-php-${{ matrix.tag }}
-
       - name: Build docker image
         uses: docker/build-push-action@v6
         with:
           context: ./php
           file: ./php/${{ matrix.dockerfile }}
           platforms: linux/amd64,linux/arm64
-          cache-from: |
-            type=local,src=/tmp/.buildx-cache
-            keepsuit/php:${{ matrix.tag }}
-          cache-to: type=local,dest=/tmp/.buildx-cache,mode=all
+          cache-from: type=gha,scope=php-${{ matrix.tag }}
+          cache-to: type=gha,scope=php-${{ matrix.tag }},mode=max
           push: true
           tags: |
             keepsuit/php:${{ matrix.tag }}
