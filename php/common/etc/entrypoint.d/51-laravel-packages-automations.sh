@@ -8,11 +8,6 @@ artisan_command_exists() {
 
 if [ "$DISABLE_DEFAULT_CONFIG" = "false" ]; then
     if [ -f "$APP_BASE_DIR/artisan" ]; then
-        if artisan_command_exists "data:cache-structures"; then
-            echo "🚀 Caching spatie/laravel-data structures..."
-            php "$APP_BASE_DIR/artisan" data:cache-structures -n || true
-        fi
-
         if artisan_command_exists "lighthouse:cache"; then
             echo "🚀 Caching nuwave/lighthouse schema..."
             php "$APP_BASE_DIR/artisan" lighthouse:cache -n || true

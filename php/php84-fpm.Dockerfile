@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 ARG IMAGE_VERSION=v3.5.1
-FROM serversideup/php:8.3-fpm-nginx-alpine-${IMAGE_VERSION}
+FROM serversideup/php:8.4-fpm-nginx-alpine-${IMAGE_VERSION}
 
 USER root
 

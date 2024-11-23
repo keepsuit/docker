@@ -60,6 +60,10 @@ jobs:
             dockerfile: php83-fpm.Dockerfile
           - tag: "8.3-unit"
             dockerfile: php83-unit.Dockerfile
+          - tag: "8.4-fpm"
+            dockerfile: php84-fpm.Dockerfile
+          - tag: "8.4-unit"
+            dockerfile: php84-unit.Dockerfile
 
     steps:
       - name: Checkout code

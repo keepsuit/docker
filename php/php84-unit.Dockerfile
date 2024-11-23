@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 ARG IMAGE_VERSION=v3.5.1
-FROM serversideup/php:8.3-fpm-nginx-alpine-${IMAGE_VERSION}
+FROM serversideup/php:8.4-unit-${IMAGE_VERSION}
 
 USER root
 
@@ -25,14 +25,14 @@ RUN install-php-extensions \
     sqlite3 \
     xsl
 
-RUN docker-php-serversideup-dep-install-alpine "ffmpeg mysql-client"
+RUN docker-php-serversideup-dep-install-debian "ffmpeg default-mysql-client"
 
 COPY --chmod=755 common/ /
 
 USER www-data
 WORKDIR /app
 ENV APP_BASE_DIR=/app
-ENV NGINX_WEBROOT=/app/public
+ENV UNIT_WEBROOT=/app/public
 ENV AUTORUN_ENABLED=true
 ENV AUTORUN_LARAVEL_MIGRATION=false
 ENV PHP_OPCACHE_ENABLE=1
