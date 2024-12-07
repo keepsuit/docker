@@ -17,6 +17,7 @@ RUN install-php-extensions \
     pdo_sqlite \
     phar \
     posix \
+    protobuf \
     redis \
     simplexml \
     soap \
@@ -26,6 +27,11 @@ RUN install-php-extensions \
     xsl
 
 RUN docker-php-serversideup-dep-install-alpine "ffmpeg mysql-client"
+
+RUN ln -s $(php-config --extension-dir) /usr/local/lib/php/extensions/current
+ARG TARGETARCH
+COPY extensions/8.3/alpine/${TARGETARCH}/ /usr/local/lib/php/extensions/current/
+RUN docker-php-ext-enable grpc
 
 COPY --chmod=755 common/ /
 
