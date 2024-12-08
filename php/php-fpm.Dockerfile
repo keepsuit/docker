@@ -1,7 +1,9 @@
 # syntax=docker/dockerfile:1
 
+ARG PHP_VERSION=8.3
 ARG IMAGE_VERSION=v3.5.1
-FROM serversideup/php:8.3-fpm-nginx-alpine-${IMAGE_VERSION}
+
+FROM serversideup/php:${PHP_VERSION}-fpm-nginx-alpine-${IMAGE_VERSION}
 
 USER root
 
@@ -29,8 +31,9 @@ RUN install-php-extensions \
 RUN docker-php-serversideup-dep-install-alpine "ffmpeg mysql-client"
 
 RUN ln -s $(php-config --extension-dir) /usr/local/lib/php/extensions/current
+ARG PHP_VERSION
 ARG TARGETARCH
-COPY extensions/8.3/alpine/${TARGETARCH}/ /usr/local/lib/php/extensions/current/
+COPY extensions/${PHP_VERSION}/alpine/${TARGETARCH}/ /usr/local/lib/php/extensions/current/
 RUN docker-php-ext-enable grpc
 
 COPY --chmod=755 common/ /
