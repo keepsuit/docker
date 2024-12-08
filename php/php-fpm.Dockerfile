@@ -28,7 +28,7 @@ RUN install-php-extensions \
     sqlite3 \
     xsl
 
-RUN docker-php-serversideup-dep-install-alpine "ffmpeg mysql-client"
+RUN docker-php-serversideup-dep-install-alpine "bash ffmpeg mysql-client"
 
 RUN ln -s $(php-config --extension-dir) /usr/local/lib/php/extensions/current
 ARG PHP_VERSION
