@@ -3,6 +3,8 @@
 FROM keepsuit/php:8.4-fpm
 ARG TARGETARCH
 
+USER root
+
 RUN docker-php-serversideup-dep-install-alpine "tzdata ca-certificates"
 
 ENV SUPERCRONIC_VERSION=v0.2.33
@@ -16,3 +18,5 @@ ENV GRPC_HEALTH_PROBE_VERSION=v0.4.35
 RUN curl -sSL -o grpc_health_probe "https://github.com/grpc-ecosystem/grpc-health-probe/releases/download/${GRPC_HEALTH_PROBE_VERSION}/grpc_health_probe-linux-${TARGETARCH}" \
     && chmod +x grpc_health_probe \
     && mv grpc_health_probe /usr/local/bin/grpc_health_probe
+
+USER www-data
