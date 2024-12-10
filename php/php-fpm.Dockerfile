@@ -9,6 +9,7 @@ USER root
 
 RUN install-php-extensions \
     bcmath \
+    excimer \
     exif \
     ftp \
     gd \
@@ -26,7 +27,8 @@ RUN install-php-extensions \
     sockets \
     sodium \
     sqlite3 \
-    xsl
+    xsl \
+    uv
 
 RUN docker-php-serversideup-dep-install-alpine "bash ffmpeg mysql-client"
 
