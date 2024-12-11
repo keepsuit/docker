@@ -33,10 +33,12 @@ RUN install-php-extensions \
 RUN docker-php-serversideup-dep-install-debian "ffmpeg default-mysql-client"
 
 RUN ln -s $(php-config --extension-dir) /usr/local/lib/php/extensions/current
+
 ARG PHP_VERSION
 ARG TARGETARCH
-COPY extensions/${PHP_VERSION}/bookworm/${TARGETARCH}/ /usr/local/lib/php/extensions/current/
-RUN docker-php-ext-enable grpc
+RUN curl -sSL -o grpc.so "https://s3.eu-central-1.amazonaws.com/docker-php-assets.keepsuit.com/extensions/${PHP_VERSION}/bookworm/${TARGETARCH}/grpc.so" \
+    && mv grpc.so /usr/local/lib/php/extensions/current/grpc.so \
+    && docker-php-ext-enable grpc
 
 COPY --chmod=755 common/ /
 
