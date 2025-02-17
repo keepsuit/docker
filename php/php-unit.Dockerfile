@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 ARG PHP_VERSION=8.3
-ARG IMAGE_VERSION=v3.5.1
+ARG IMAGE_VERSION=v3.5.2
 
 FROM serversideup/php:${PHP_VERSION}-unit-${IMAGE_VERSION}
 
