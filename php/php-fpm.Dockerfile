@@ -3,7 +3,11 @@
 ARG PHP_VERSION=8.3
 ARG IMAGE_VERSION=v3.5.2
 
-FROM serversideup/php:${PHP_VERSION}-fpm-nginx-alpine-${IMAGE_VERSION}
+FROM serversideup/php:${PHP_VERSION}-fpm-nginx-alpine-${IMAGE_VERSION} as base_alpine
+FROM serversideup/php:${PHP_VERSION}-fpm-nginx-${IMAGE_VERSION} as base_bookworm
+
+ARG OS_VARIANT=alpine # alpine or bookworm
+FROM base_${OS_VARIANT}
 
 USER root
 
@@ -31,13 +35,15 @@ RUN install-php-extensions \
     xsl \
     uv
 
-RUN docker-php-serversideup-dep-install-alpine "bash ffmpeg mysql-client"
+RUN docker-php-serversideup-dep-install-alpine "bash ffmpeg mysql-client" \
+    && docker-php-serversideup-dep-install-debian "ffmpeg default-mysql-client"
 
 RUN ln -s $(php-config --extension-dir) /usr/local/lib/php/extensions/current
 
 ARG PHP_VERSION
+ARG OS_VARIANT
 ARG TARGETARCH
-RUN curl -sSL -o grpc.so "https://s3.eu-central-1.amazonaws.com/docker-php-assets.keepsuit.com/extensions/${PHP_VERSION}/alpine/${TARGETARCH}/grpc.so" \
+RUN curl -sSL -o grpc.so "https://s3.eu-central-1.amazonaws.com/docker-php-assets.keepsuit.com/extensions/${PHP_VERSION}/${OS_VARIANT}/${TARGETARCH}/grpc.so" \
     && mv grpc.so /usr/local/lib/php/extensions/current/grpc.so \
     && docker-php-ext-enable grpc
 

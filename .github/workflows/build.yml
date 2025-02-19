@@ -19,12 +19,22 @@ jobs:
           - tag: "8.3-fpm"
             dockerfile: php-fpm.Dockerfile
             php_version: "8.3"
+            os_version: "alpine"
+          - tag: "8.3-fpm-debian"
+            dockerfile: php-fpm.Dockerfile
+            php_version: "8.3"
+            os_version: "bookworm"
           - tag: "8.3-unit"
             dockerfile: php-unit.Dockerfile
             php_version: "8.3"
           - tag: "8.4-fpm"
             dockerfile: php-fpm.Dockerfile
             php_version: "8.4"
+            os_version: "alpine"
+          - tag: "8.4-fpm-debian"
+            dockerfile: php-fpm.Dockerfile
+            php_version: "8.4"
+            os_version: "bookworm"
           - tag: "8.4-unit"
             dockerfile: php-unit.Dockerfile
             php_version: "8.4"
@@ -50,7 +60,9 @@ jobs:
         with:
           context: ./php
           file: ./php/${{ matrix.dockerfile }}
-          build-args: PHP_VERSION=${{ matrix.php_version }}
+          build-args: |
+            PHP_VERSION=${{ matrix.php_version }}
+            OS_VERSION=${{ matrix.os_version }}
           platforms: linux/amd64,linux/arm64
           cache-from: type=gha,scope=php-${{ matrix.tag }}
           cache-to: type=gha,scope=php-${{ matrix.tag }},mode=max
