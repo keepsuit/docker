@@ -2,11 +2,11 @@
 
 ARG PHP_VERSION=8.3
 ARG IMAGE_VERSION=v3.5.2
+ARG OS_VARIANT=alpine
 
-FROM serversideup/php:${PHP_VERSION}-fpm-nginx-alpine-${IMAGE_VERSION} as base_alpine
-FROM serversideup/php:${PHP_VERSION}-fpm-nginx-${IMAGE_VERSION} as base_bookworm
+FROM serversideup/php:${PHP_VERSION}-fpm-nginx-alpine-${IMAGE_VERSION} AS base_alpine
+FROM serversideup/php:${PHP_VERSION}-fpm-nginx-${IMAGE_VERSION} AS base_bookworm
 
-ARG OS_VARIANT=alpine # alpine or bookworm
 FROM base_${OS_VARIANT}
 
 USER root
