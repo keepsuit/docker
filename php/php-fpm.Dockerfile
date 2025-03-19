@@ -22,6 +22,7 @@ RUN install-php-extensions \
     gmp \
     iconv \
     intl \
+    openswoole \
     pdo_sqlite \
     phar \
     posix \
