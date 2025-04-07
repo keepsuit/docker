@@ -48,8 +48,6 @@ ARG TARGETARCH
 RUN curl -sSL -o supercronic "https://github.com/aptible/supercronic/releases/download/${SUPERCRONIC_VERSION}/supercronic-linux-${TARGETARCH}" \
     && chmod +x supercronic \
     && mv supercronic /usr/local/bin/supercronic
-RUN mkdir -p /usr/local/etc/supercronic \
-    && echo '* * * * * cd /app && php artisan schedule:run' > /usr/local/etc/supercronic/crontab
 
 COPY --chmod=755 common/ /
 
