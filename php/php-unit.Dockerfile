@@ -2,6 +2,7 @@
 
 ARG PHP_VERSION=8.3
 ARG IMAGE_VERSION=v3.5.2
+ARG SUPERCRONIC_VERSION=v0.2.33
 
 FROM serversideup/php:${PHP_VERSION}-unit-${IMAGE_VERSION}
 
@@ -41,6 +42,14 @@ ARG TARGETARCH
 RUN curl -sSL -o grpc.so "https://s3.eu-central-1.amazonaws.com/docker-php-assets.keepsuit.com/extensions/${PHP_VERSION}/bookworm/${TARGETARCH}/grpc.so" \
     && mv grpc.so /usr/local/lib/php/extensions/current/grpc.so \
     && docker-php-ext-enable grpc
+
+ARG SUPERCRONIC_VERSION
+ARG TARGETARCH
+RUN curl -sSL -o supercronic "https://github.com/aptible/supercronic/releases/download/${SUPERCRONIC_VERSION}/supercronic-linux-${TARGETARCH}" \
+    && chmod +x supercronic \
+    && mv supercronic /usr/local/bin/supercronic
+RUN mkdir -p /usr/local/etc/supercronic \
+    && echo '* * * * * cd /app && php artisan schedule:run' > /usr/local/etc/supercronic/crontab
 
 COPY --chmod=755 common/ /
 
