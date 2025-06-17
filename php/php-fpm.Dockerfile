@@ -22,6 +22,7 @@ RUN install-php-extensions \
     gettext \
     gmp \
     iconv \
+    imagick \
     intl \
     openswoole \
     pdo_sqlite \
