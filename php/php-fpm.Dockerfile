@@ -3,7 +3,7 @@
 ARG PHP_VERSION=8.3
 ARG IMAGE_VERSION=v3.5.2
 ARG OS_VARIANT=alpine
-ARG SUPERCRONIC_VERSION=v0.2.33
+ARG SUPERCRONIC_VERSION=v0.2.34
 
 FROM serversideup/php:${PHP_VERSION}-fpm-nginx-alpine-${IMAGE_VERSION} AS base_alpine
 FROM serversideup/php:${PHP_VERSION}-fpm-nginx-${IMAGE_VERSION} AS base_bookworm
@@ -38,25 +38,15 @@ RUN install-php-extensions \
     xsl \
     uv
 
-RUN docker-php-serversideup-dep-install-alpine "bash ffmpeg mysql-client" \
-    && docker-php-serversideup-dep-install-debian "ffmpeg default-mysql-client"
-
 RUN ln -s $(php-config --extension-dir) /usr/local/lib/php/extensions/current
 
+COPY --chmod=755 common/ /
+
+ARG TARGETARCH
 ARG PHP_VERSION
 ARG OS_VARIANT
-ARG TARGETARCH
-RUN curl -sSL -o grpc.so "https://s3.eu-central-1.amazonaws.com/docker-php-assets.keepsuit.com/extensions/${PHP_VERSION}/${OS_VARIANT}/${TARGETARCH}/grpc.so" \
-    && mv grpc.so /usr/local/lib/php/extensions/current/grpc.so \
-    && docker-php-ext-enable grpc
-
 ARG SUPERCRONIC_VERSION
-ARG TARGETARCH
-RUN curl -sSL -o supercronic "https://github.com/aptible/supercronic/releases/download/${SUPERCRONIC_VERSION}/supercronic-linux-${TARGETARCH}" \
-    && chmod +x supercronic \
-    && mv supercronic /usr/local/bin/supercronic
-
-COPY --chmod=755 common/ /
+RUN docker-php-serversideup-setup
 
 USER www-data
 WORKDIR /app
