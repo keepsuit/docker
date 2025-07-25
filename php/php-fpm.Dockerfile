@@ -40,7 +40,10 @@ RUN install-php-extensions \
 
 RUN ln -s $(php-config --extension-dir) /usr/local/lib/php/extensions/current
 
+# Don't install recommended packages to keep image size down
 RUN sed -i 's/apt-get install -y \$DEP_PACKAGES/apt-get install -y --no-install-recommends \$DEP_PACKAGES/g' /usr/local/bin/docker-php-serversideup-dep-install-debian
+# Remove directory serving from nginx config
+RUN sed -i 's/try_files \$uri \$uri\//try_files $uri /' /etc/nginx/site-opts.d/http.conf.template
 
 COPY --chmod=755 common/ /
 
