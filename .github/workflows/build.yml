@@ -16,26 +16,30 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - tags: ["8.3-fpm-alpine", "8.3-fpm"]
+          - tag: "8.3-fpm-alpine"
+            alias: "8.3-fpm"
             dockerfile: php-fpm.Dockerfile
             php_version: "8.3"
             os_variant: "alpine"
-          - tags: ["8.3-fpm-debian"]
+          - tag: "8.3-fpm-debian"
             dockerfile: php-fpm.Dockerfile
             php_version: "8.3"
             os_variant: "debian"
-          - tags: ["8.3-unit-debian", "8.3-unit"]
+          - tag: "8.3-unit-debian"
+            alias: "8.3-unit"
             dockerfile: php-unit.Dockerfile
             php_version: "8.3"
-          - tags: ["8.4-fpm-alpine", "8.4-fpm"]
+          - tag: "8.4-fpm-alpine"
+            alias: "8.4-fpm"
             dockerfile: php-fpm.Dockerfile
             php_version: "8.4"
             os_variant: "alpine"
-          - tags: ["8.4-fpm-debian"]
+          - tag: "8.4-fpm-debian"
             dockerfile: php-fpm.Dockerfile
             php_version: "8.4"
             os_variant: "debian"
-          - tags: ["8.4-unit-debian", "8.4-unit"]
+          - tag: "8.4-unit-debian"
+            alias: "8.4-unit"
             dockerfile: php-unit.Dockerfile
             php_version: "8.4"
 
@@ -55,34 +59,6 @@ jobs:
           username: cappuc
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
 
-      - name: Prepare tags
-        id: prepare_tags
-        run: |
-          # Build newline-separated list of tags from matrix.tags and prefix each with keepsuit/php:
-          tags_raw="${{ join('\n', matrix.tags) }}"
-          echo $tags_raw
-
-          if [ -n "$tags_raw" ]; then
-            tags_prefixed=$(echo "$tags_raw" | sed 's@^@keepsuit/php:@')
-          else
-            tags_prefixed=""
-          fi
-          echo $tags_prefixed
-
-          # Normalize os_variant (default to debian when not provided)
-          if [ -z "${{ matrix.os_variant }}" ] || [ "${{ matrix.os_variant }}" = "null" ]; then
-            os_variant=debian
-          else
-            os_variant="${{ matrix.os_variant }}"
-          fi
-
-          cache_scope="${{ matrix.tags[0] }}"
-
-          echo "tags<<EOF" >> $GITHUB_OUTPUT
-          echo "$tags_prefixed" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
-          echo "cache_scope=${cache_scope}" >> $GITHUB_OUTPUT
-
       - name: Build docker image
         uses: docker/build-push-action@v6
         with:
@@ -92,10 +68,12 @@ jobs:
             PHP_VERSION=${{ matrix.php_version }}
             OS_VARIANT=${{ matrix.os_variant }}
           platforms: linux/amd64,linux/arm64
-          cache-from: type=gha,scope=${{ steps.prepare_tags.outputs.cache_scope }}
-          cache-to: type=gha,scope=${{ steps.prepare_tags.outputs.cache_scope }},mode=max
+          cache-from: type=gha,scope=php-${{ matrix.tag }}
+          cache-to: type=gha,scope=php-${{ matrix.tag }},mode=max
           push: true
-          tags: ${{ steps.prepare_tags.outputs.tags }}
+          tags: |
+            keepsuit/php:${{ matrix.tag }}
+            ${{ matrix.alias && format('keepsuit/php:{}', matrix.alias) }}
 
   laravel-app:
     runs-on: ubuntu-latest
