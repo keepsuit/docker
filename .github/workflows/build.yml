@@ -60,11 +60,14 @@ jobs:
         run: |
           # Build newline-separated list of tags from matrix.tags and prefix each with keepsuit/php:
           tags_raw="${{ join('\n', matrix.tags) }}"
+          echo $tags_raw
+
           if [ -n "$tags_raw" ]; then
             tags_prefixed=$(echo "$tags_raw" | sed 's@^@keepsuit/php:@')
           else
             tags_prefixed=""
           fi
+          echo $tags_prefixed
 
           # Normalize os_variant (default to debian when not provided)
           if [ -z "${{ matrix.os_variant }}" ] || [ "${{ matrix.os_variant }}" = "null" ]; then
