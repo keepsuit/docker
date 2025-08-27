@@ -29,6 +29,7 @@ jobs:
             alias: "8.3-unit"
             dockerfile: php-unit.Dockerfile
             php_version: "8.3"
+            os_variant: "debian"
           - tag: "8.4-fpm-alpine"
             alias: "8.4-fpm"
             dockerfile: php-fpm.Dockerfile
@@ -42,6 +43,7 @@ jobs:
             alias: "8.4-unit"
             dockerfile: php-unit.Dockerfile
             php_version: "8.4"
+            os_variant: "debian"
 
     steps:
       - name: Checkout code
