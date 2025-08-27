@@ -73,7 +73,7 @@ jobs:
             os_variant="${{ matrix.os_variant }}"
           fi
 
-          cache_scope=${{ matrix.tags[0] }}
+          cache_scope="${{ matrix.tags[0] }}"
 
           echo "tags<<EOF" >> $GITHUB_OUTPUT
           echo "$tags_prefixed" >> $GITHUB_OUTPUT
