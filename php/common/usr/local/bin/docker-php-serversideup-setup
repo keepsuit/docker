@@ -15,7 +15,7 @@ if [ "$OS_VARIANT" != "alpine" ]; then
     esac
     MYSQL_VERSION=8.4.6
     MYSQL_DIR=mysql-${MYSQL_VERSION}-linux-glibc2.28-${MYSQL_ARCH}
-    curl -sSLO https://dev.mysql.com/get/Downloads/MySQL-8.4/${MYSQL_DIR}.tar.xz
+    curl -fsSLO https://dev.mysql.com/get/Downloads/MySQL-8.4/${MYSQL_DIR}.tar.xz
     tar -xf ${MYSQL_DIR}.tar.xz
     mv ${MYSQL_DIR}/bin/mysqldump /usr/local/bin/mysqldump
     chmod +x /usr/local/bin/mysqldump
@@ -24,13 +24,13 @@ fi
 
 
 echo "🤖Installing grpc extension..."
-curl -sSL -o grpc.so "https://s3.eu-central-1.amazonaws.com/docker-php-assets.keepsuit.com/extensions/${PHP_VERSION}/${OS_VARIANT}/${TARGETARCH}/grpc.so"
+curl -fsSL -o grpc.so "https://s3.eu-central-1.amazonaws.com/docker-php-assets.keepsuit.com/extensions/${PHP_VERSION}/${OS_VARIANT}/${TARGETARCH}/grpc.so"
 PHP_EXTENSION_DIR=$(php-config --extension-dir)
 mv grpc.so ${PHP_EXTENSION_DIR}/grpc.so
-docker-php-ext-enable grpc
+PHPIZE_DEPS="" docker-php-ext-enable grpc
 
 
 echo "🤖Installing supercronic..."
-curl -sSL -o supercronic "https://github.com/aptible/supercronic/releases/download/${SUPERCRONIC_VERSION}/supercronic-linux-${TARGETARCH}"
+curl -fsSL -o supercronic "https://github.com/aptible/supercronic/releases/download/${SUPERCRONIC_VERSION}/supercronic-linux-${TARGETARCH}"
 chmod +x supercronic
 mv supercronic /usr/local/bin/supercronic
