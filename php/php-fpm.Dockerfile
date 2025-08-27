@@ -1,14 +1,11 @@
 # syntax=docker/dockerfile:1
 
-ARG PHP_VERSION=8.3
-ARG IMAGE_VERSION=v3.5.2
-ARG OS_VARIANT=alpine
+ARG PHP_VERSION=8.4
+ARG IMAGE_VERSION=v3.6.0
+ARG OS_VARIANT=debian
 ARG SUPERCRONIC_VERSION=v0.2.34
 
-FROM serversideup/php:${PHP_VERSION}-fpm-nginx-alpine-${IMAGE_VERSION} AS base_alpine
-FROM serversideup/php:${PHP_VERSION}-fpm-nginx-${IMAGE_VERSION} AS base_bookworm
-
-FROM base_${OS_VARIANT}
+FROM serversideup/php:${PHP_VERSION}-fpm-nginx-${OS_VARIANT}-${IMAGE_VERSION}
 
 USER root
 

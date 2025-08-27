@@ -1,10 +1,11 @@
 # syntax=docker/dockerfile:1
 
-ARG PHP_VERSION=8.3
-ARG IMAGE_VERSION=v3.5.2
+ARG PHP_VERSION=8.4
+ARG IMAGE_VERSION=v3.6.0
+ARG OS_VARIANT=debian
 ARG SUPERCRONIC_VERSION=v0.2.34
 
-FROM serversideup/php:${PHP_VERSION}-unit-${IMAGE_VERSION}
+FROM serversideup/php:${PHP_VERSION}-unit-${OS_VARIANT}-${IMAGE_VERSION}
 
 USER root
 
