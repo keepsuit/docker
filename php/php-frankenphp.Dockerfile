@@ -4,7 +4,7 @@ ARG PHP_VERSION=8.4
 ARG OS_VARIANT=debian
 ARG SUPERCRONIC_VERSION=v0.2.34
 
-FROM serversideup/php:283-${PHP_VERSION}-frankenphp-${OS_VARIANT}
+FROM serversideup/php-dev:283-${PHP_VERSION}-frankenphp-${OS_VARIANT}
 
 USER root
 
