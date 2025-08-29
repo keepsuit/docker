@@ -7,7 +7,7 @@ docker-php-serversideup-dep-install-debian "ffmpeg"
 
 # MySQL client doesn't work on alpine
 if [ "$OS_VARIANT" != "alpine" ]; then
-    echo "🤖Installing MySQL client..."
+    echo "🤖 Installing MySQL client..."
 
     case ${TARGETARCH} in
         "amd64")  MYSQL_ARCH=x86_64  ;;
@@ -22,15 +22,17 @@ if [ "$OS_VARIANT" != "alpine" ]; then
     rm -rf ${MYSQL_DIR}*
 fi
 
-
-echo "🤖Installing grpc extension..."
+if php -r 'exit(defined("PHP_ZTS") && PHP_ZTS ? 0 : 1);'; then
+echo "🔴 Skipping grpc installation on PHP ZTS"
+else
+echo "🤖 Installing grpc extension..."
 curl -fsSL -o grpc.so "https://s3.eu-central-1.amazonaws.com/docker-php-assets.keepsuit.com/extensions/${PHP_VERSION}/${OS_VARIANT}/${TARGETARCH}/grpc.so"
 PHP_EXTENSION_DIR=$(php-config --extension-dir)
 mv grpc.so ${PHP_EXTENSION_DIR}/grpc.so
 PHPIZE_DEPS="" docker-php-ext-enable grpc
+fi
 
-
-echo "🤖Installing supercronic..."
+echo "🤖 Installing supercronic..."
 curl -fsSL -o supercronic "https://github.com/aptible/supercronic/releases/download/${SUPERCRONIC_VERSION}/supercronic-linux-${TARGETARCH}"
 chmod +x supercronic
 mv supercronic /usr/local/bin/supercronic
