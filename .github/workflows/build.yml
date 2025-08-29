@@ -44,6 +44,11 @@ jobs:
             dockerfile: php-unit.Dockerfile
             php_version: "8.4"
             os_variant: "debian"
+          - tag: "dev-8.4-frankenphp-debian"
+            alias: "8.4-frankenphp"
+            dockerfile: php-frankenphp.Dockerfile
+            php_version: "8.4"
+            os_variant: "debian"
 
     steps:
       - name: Checkout code
