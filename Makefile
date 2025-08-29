@@ -45,7 +45,7 @@ assets/download:
 # Carica tutti i file dalla cartella locale al bucket S3
 .PHONY: assets/upload
 assets/upload:
-	$(RCLONE_CMD) copy $(SYNC_FLAGS) --s3-acl public-read --metadata --metadata-set cache-control="max-age=31536000" $(LOCAL_DIR) $(S3_BUCKET)
+	$(RCLONE_CMD) copy $(SYNC_FLAGS) --s3-acl public-read $(LOCAL_DIR) $(S3_BUCKET)
 
 # Elimina i file locali che non sono presenti nel bucket S3 e carica i file che non sono presenti nella cartella locale
 .PHONY: assets/clear-local
