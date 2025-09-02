@@ -89,6 +89,42 @@ jobs:
           push: true
           tags: ${{ steps.prepare_tags.outputs.tags }}
 
+  puppeteer:
+    runs-on: ubuntu-latest
+    needs: [php]
+
+    strategy:
+      matrix:
+        php: ["8.3", "8.4"]
+        variant: ["fpm-debian", "fpm-alpine"]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker hub
+        uses: docker/login-action@v3
+        with:
+          username: cappuc
+          password: ${{ secrets.DOCKER_HUB_TOKEN }}
+
+      - name: Build docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./php
+          file: ./php/puppeteer.Dockerfile
+          build-args: |
+            IMAGE_TAG=${{ matrix.php }}-{{ matrix.variant }}
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: keepsuit/php:${{ matrix.php }}-{{ matrix.variant }}-puppeteer
+
   # laravel-app:
   #   runs-on: ubuntu-latest
   #   needs: [php]
