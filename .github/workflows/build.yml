@@ -85,7 +85,7 @@ jobs:
             OS_VARIANT=${{ matrix.os_variant }}
           platforms: linux/amd64,linux/arm64
           cache-from: type=gha,scope=php-${{ matrix.tag }}
-          cache-to: type=gha,scope=php-${{ matrix.tag }},mode=max
+          cache-to: type=gha,scope=php-${{ matrix.tag }},mode=min
           push: true
           tags: ${{ steps.prepare_tags.outputs.tags }}
 
@@ -120,10 +120,10 @@ jobs:
           context: ./php
           file: ./php/puppeteer.Dockerfile
           build-args: |
-            IMAGE_TAG=${{ matrix.php }}-{{ matrix.variant }}
+            IMAGE_TAG=${{ matrix.php }}-${{ matrix.variant }}
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: keepsuit/php:${{ matrix.php }}-{{ matrix.variant }}-puppeteer
+          tags: keepsuit/php:${{ matrix.php }}-${{ matrix.variant }}-puppeteer
 
   # laravel-app:
   #   runs-on: ubuntu-latest
