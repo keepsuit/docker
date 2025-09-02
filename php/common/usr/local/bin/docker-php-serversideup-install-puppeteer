@@ -1,0 +1,22 @@
+#!/bin/sh
+
+set -euo pipefail
+
+if [ -f /etc/os-release ]; then
+    # Source the os-release file (including the $NAME variable)
+    . /etc/os-release
+else
+    echo "🛑 ERROR ($script_name): Unable to determine the OS."
+    exit 1
+fi
+
+if [ "$ID" = "debian" ]; then
+curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
+fi
+
+docker-php-serversideup-dep-install-alpine "nodejs npm chromium"
+docker-php-serversideup-dep-install-debian "nodejs chromium"
+
+export PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
+
+PUPPETEER_SKIP_DOWNLOAD=true npm install --location=global puppeteer
