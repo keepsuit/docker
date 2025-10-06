@@ -2,8 +2,8 @@
 
 set -e
 
-docker-php-serversideup-dep-install-alpine "bash ffmpeg mysql-client"
-docker-php-serversideup-dep-install-debian "ffmpeg"
+docker-php-serversideup-dep-install-alpine "bash ffmpeg mysql-client htop"
+docker-php-serversideup-dep-install-debian "ffmpeg htop"
 
 
 # MySQL client doesn't work on alpine

@@ -17,6 +17,4 @@ fi
 docker-php-serversideup-dep-install-alpine "nodejs npm chromium"
 docker-php-serversideup-dep-install-debian "nodejs chromium"
 
-export PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
-
 PUPPETEER_SKIP_DOWNLOAD=true npm install --location=global puppeteer
