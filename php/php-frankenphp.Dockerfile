@@ -5,7 +5,7 @@ ARG IMAGE_VERSION=v4.0.0-beta1
 ARG OS_VARIANT=debian
 ARG SUPERCRONIC_VERSION=v0.2.37
 
-FROM serversideup/php-dev:${PHP_VERSION}-frankenphp-${OS_VARIANT}-${IMAGE_VERSION}
+FROM serversideup/php:${PHP_VERSION}-frankenphp-${OS_VARIANT}-${IMAGE_VERSION}
 
 USER root
 
