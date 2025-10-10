@@ -1,10 +1,11 @@
 # syntax=docker/dockerfile:1
 
 ARG PHP_VERSION=8.4
+ARG IMAGE_VERSION=v4.0.0-beta1
 ARG OS_VARIANT=debian
 ARG SUPERCRONIC_VERSION=v0.2.37
 
-FROM serversideup/php-dev:283-${PHP_VERSION}-frankenphp-${OS_VARIANT}
+FROM serversideup/php-dev:${PHP_VERSION}-frankenphp-${OS_VARIANT}-${IMAGE_VERSION}
 
 USER root
 
@@ -20,12 +21,10 @@ RUN install-php-extensions \
     iconv \
     imagick \
     intl \
-    openswoole \
     pdo_sqlite \
     phar \
     posix \
     protobuf \
-    redis \
     simplexml \
     soap \
     sockets \
