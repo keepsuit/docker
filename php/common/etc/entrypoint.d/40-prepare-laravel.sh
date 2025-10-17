@@ -12,7 +12,7 @@ if [ -f "$APP_BASE_DIR/artisan" ]; then
     mkdir -p storage/framework/views
     mkdir -p storage/logs
 
-    chmod ug+wx -R storage bootstrap
+    chmod -f -R ug+wx storage/app storage/backups storage/framework storage/logs bootstrap
 
     php artisan package:discover
 fi
