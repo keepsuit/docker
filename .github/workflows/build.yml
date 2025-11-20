@@ -25,6 +25,10 @@ jobs:
             dockerfile: php-fpm.Dockerfile
             php_version: "8.3"
             os_variant: "debian"
+          - tag: "8.3-frankenphp-debian"
+            dockerfile: php-frankenphp.Dockerfile
+            php_version: "8.3"
+            os_variant: "debian"
           - tag: "8.4-fpm-alpine"
             alias: "8.4-fpm"
             dockerfile: php-fpm.Dockerfile
