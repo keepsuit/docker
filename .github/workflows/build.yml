@@ -96,16 +96,29 @@ jobs:
           username: cappuc
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
 
+      - name: Prepare tag
+        id: prepare_tag
+        run: |
+          SOURCE_TAG="${{ matrix.php }}-${{ matrix.variant }}"
+
+          if [ $GITHUB_REF_NAME != "master" ]; then
+            SOURCE_TAG="dev-${TAG}"
+          fi
+
+          echo $SOURCE_TAG
+
+          echo "source_tag=${SOURCE_TAG}" >> $GITHUB_OUTPUT
+
       - name: Build docker image
         uses: docker/build-push-action@v6
         with:
           context: ./php
           file: ./php/puppeteer.Dockerfile
           build-args: |
-            IMAGE_TAG=${{ matrix.php }}-${{ matrix.variant }}
+            IMAGE_TAG=${{ steps.prepare_tag.outputs.source_tag }}
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: keepsuit/php:${{ matrix.php }}-${{ matrix.variant }}-puppeteer
+          tags: keepsuit/php:${{ steps.prepare_tag.outputs.source_tag }}-puppeteer
 
   # laravel-app:
   #   runs-on: ubuntu-latest
