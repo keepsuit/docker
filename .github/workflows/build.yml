@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - dev
   schedule:
     - cron: "0 12 * * 0"
   workflow_dispatch:
@@ -15,33 +16,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - tag: "8.3-fpm-alpine"
-            alias: "8.3-fpm"
-            dockerfile: php-fpm.Dockerfile
-            php_version: "8.3"
-            os_variant: "alpine"
-          - tag: "8.3-fpm-debian"
-            dockerfile: php-fpm.Dockerfile
-            php_version: "8.3"
-            os_variant: "debian"
-          - tag: "8.3-frankenphp-debian"
-            dockerfile: php-frankenphp.Dockerfile
-            php_version: "8.3"
-            os_variant: "debian"
-          - tag: "8.4-fpm-alpine"
-            alias: "8.4-fpm"
-            dockerfile: php-fpm.Dockerfile
-            php_version: "8.4"
-            os_variant: "alpine"
-          - tag: "8.4-fpm-debian"
-            dockerfile: php-fpm.Dockerfile
-            php_version: "8.4"
-            os_variant: "debian"
-          - tag: "8.4-frankenphp-debian"
-            dockerfile: php-frankenphp.Dockerfile
-            php_version: "8.4"
-            os_variant: "debian"
+        php: ["8.3", "8.4"]
+        os: ["alpine", "debian"]
+        variant: ["fpm-nginx", "frankenphp"]
+        exclude:
+          - os: "alpine"
+            variant: "frankenphp"
 
     steps:
       - name: Checkout code
@@ -59,29 +39,37 @@ jobs:
           username: cappuc
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
 
-      - name: Prepare tags
-        id: prepare_tags
+      - name: Prepare tag
+        id: prepare_tag
         run: |
-          echo "tags<<EOF" >> $GITHUB_OUTPUT
-          echo "keepsuit/php:${{ matrix.tag }}" >> $GITHUB_OUTPUT
-          if [ -n "${{ matrix.alias }}" ]; then
-            echo "keepsuit/php:${{ matrix.alias }}" >> $GITHUB_OUTPUT
+          if [ "${{ matrix.variant }}" = "fpm-nginx" ]; then
+            TAG="${{ matrix.php }}-fpm-${{ matrix.os }}"
+          else
+            TAG="${{ matrix.php }}-${{ matrix.variant }}-${{ matrix.os }}"
           fi
-          echo "EOF" >> $GITHUB_OUTPUT
+
+          if [ $GITHUB_REF_NAME != "master" ]; then
+            TAG="dev-${TAG}"
+          fi
+
+          echo $TAG
+
+          echo "tag=${TAG}" >> $GITHUB_OUTPUT
 
       - name: Build docker image
         uses: docker/build-push-action@v6
         with:
           context: ./php
-          file: ./php/${{ matrix.dockerfile }}
+          file: ./php/base.Dockerfile
           build-args: |
-            PHP_VERSION=${{ matrix.php_version }}
-            OS_VARIANT=${{ matrix.os_variant }}
+            PHP_VERSION=${{ matrix.php }}
+            OS=${{ matrix.os }}
+            VARIANT=${{ matrix.variant }}
           platforms: linux/amd64,linux/arm64
-          cache-from: type=gha,scope=php-${{ matrix.tag }}
-          cache-to: type=gha,scope=php-${{ matrix.tag }},mode=min
+          cache-from: type=gha,scope=php-${{ steps.prepare_tag.outputs.tag }}
+          cache-to: type=gha,scope=php-${{ steps.prepare_tag.outputs.tag }},mode=min
           push: true
-          tags: ${{ steps.prepare_tags.outputs.tags }}
+          tags: ${{ steps.prepare_tag.outputs.tag }}
 
   puppeteer:
     runs-on: ubuntu-latest
