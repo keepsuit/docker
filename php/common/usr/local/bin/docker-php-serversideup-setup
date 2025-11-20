@@ -7,7 +7,7 @@ docker-php-serversideup-dep-install-debian "ffmpeg htop"
 
 
 # MySQL client doesn't work on alpine
-if [ "$OS_VARIANT" != "alpine" ]; then
+if [ "$OS" != "alpine" ]; then
     echo "🤖 Installing MySQL client..."
 
     case ${TARGETARCH} in
@@ -29,7 +29,7 @@ PHP_EXTENSION_VERSION=$PHP_VERSION
 if php -r 'exit(defined("PHP_ZTS") && PHP_ZTS ? 0 : 1);'; then
 PHP_EXTENSION_VERSION="${PHP_VERSION}-zts"
 fi
-curl -fsSL -o grpc.so "https://s3.eu-central-1.amazonaws.com/docker-php-assets.keepsuit.com/extensions/${PHP_EXTENSION_VERSION}/${OS_VARIANT}/${TARGETARCH}/grpc.so"
+curl -fsSL -o grpc.so "https://s3.eu-central-1.amazonaws.com/docker-php-assets.keepsuit.com/extensions/${PHP_EXTENSION_VERSION}/${OS}/${TARGETARCH}/grpc.so"
 PHP_EXTENSION_DIR=$(php-config --extension-dir)
 mv grpc.so ${PHP_EXTENSION_DIR}/grpc.so
 PHPIZE_DEPS="" docker-php-ext-enable grpc
