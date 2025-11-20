@@ -102,7 +102,7 @@ jobs:
           SOURCE_TAG="${{ matrix.php }}-${{ matrix.variant }}"
 
           if [ $GITHUB_REF_NAME != "master" ]; then
-            SOURCE_TAG="dev-${TAG}"
+            SOURCE_TAG="dev-${SOURCE_TAG}"
           fi
 
           echo $SOURCE_TAG
