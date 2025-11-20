@@ -34,7 +34,7 @@ jobs:
             dockerfile: php-fpm.Dockerfile
             php_version: "8.4"
             os_variant: "debian"
-          - tag: "dev-8.4-frankenphp-debian"
+          - tag: "8.4-frankenphp-debian"
             dockerfile: php-frankenphp.Dockerfile
             php_version: "8.4"
             os_variant: "debian"
@@ -86,7 +86,7 @@ jobs:
     strategy:
       matrix:
         php: ["8.3", "8.4"]
-        variant: ["fpm-debian", "fpm-alpine"]
+        variant: ["fpm-debian", "fpm-alpine", "frankenphp-debian"]
 
     steps:
       - name: Checkout code
