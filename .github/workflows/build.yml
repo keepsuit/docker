@@ -69,7 +69,7 @@ jobs:
           cache-from: type=gha,scope=php-${{ steps.prepare_tag.outputs.tag }}
           cache-to: type=gha,scope=php-${{ steps.prepare_tag.outputs.tag }},mode=min
           push: true
-          tags: ${{ steps.prepare_tag.outputs.tag }}
+          tags: keepsuit/php:${{ steps.prepare_tag.outputs.tag }}
 
   puppeteer:
     runs-on: ubuntu-latest
