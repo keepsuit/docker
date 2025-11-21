@@ -42,6 +42,7 @@ RUN ln -s $(php-config --extension-dir) /usr/local/lib/php/extensions/current
 RUN sed -i 's/apt-get install -y \$DEP_PACKAGES/apt-get install -y --no-install-recommends \$DEP_PACKAGES/g' /usr/local/bin/docker-php-serversideup-dep-install-debian
 
 # Remove directory serving from nginx config
+ARG VARIANT
 RUN if [ "$VARIANT" = "fpm-nginx" ]; then \
         sed -i 's/try_files \$uri \$uri\//try_files $uri /' /etc/nginx/site-opts.d/http.conf.template; \
     fi
