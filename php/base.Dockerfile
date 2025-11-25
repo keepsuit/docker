@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 ARG PHP_VERSION=8.4
-ARG IMAGE_VERSION=v4.0.0
+ARG IMAGE_VERSION=v4.2.0
 # Use 'debian' or 'alpine'
 ARG OS=debian
 # Use 'fpm-nginx' or 'frankenphp'
