@@ -4,11 +4,14 @@ ARG PHP_VERSION=8.4
 ARG IMAGE_VERSION=v4.2.0
 # Use 'debian' or 'alpine'
 ARG OS=debian
-# Use 'fpm-nginx' or 'frankenphp'
-ARG VARIANT=fpm-nginx
+# Use 'fpm' or 'frankenphp'
+ARG VARIANT=fpm
 ARG SUPERCRONIC_VERSION=v0.2.39
 
-FROM serversideup/php:${PHP_VERSION}-${VARIANT}-${OS}-${IMAGE_VERSION}
+FROM serversideup/php:${PHP_VERSION}-fpm-nginx-${OS}-${IMAGE_VERSION} AS base_fpm
+FROM serversideup/php:${PHP_VERSION}-frankenphp-${OS}-${IMAGE_VERSION} AS base_frankenphp
+
+FROM base_${VARIANT}
 
 USER root
 

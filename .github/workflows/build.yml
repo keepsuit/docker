@@ -18,7 +18,7 @@ jobs:
       matrix:
         php: ["8.3", "8.4"]
         os: ["alpine", "debian"]
-        variant: ["fpm-nginx", "frankenphp"]
+        variant: ["fpm", "frankenphp"]
         exclude:
           - os: "alpine"
             variant: "frankenphp"
@@ -42,11 +42,7 @@ jobs:
       - name: Prepare tag
         id: prepare_tag
         run: |
-          if [ "${{ matrix.variant }}" = "fpm-nginx" ]; then
-            TAG="${{ matrix.php }}-fpm-${{ matrix.os }}"
-          else
-            TAG="${{ matrix.php }}-${{ matrix.variant }}-${{ matrix.os }}"
-          fi
+          TAG="${{ matrix.php }}-${{ matrix.variant }}-${{ matrix.os }}"
 
           if [ "$GITHUB_REF_NAME" != "master" ]; then
             TAG="dev-${TAG}"
