@@ -46,8 +46,9 @@ RUN sed -i 's/apt-get install -y \$DEP_PACKAGES/apt-get install -y --no-install-
 
 # Remove directory serving from nginx config
 ARG VARIANT
-RUN if [ "$VARIANT" = "fpm-nginx" ]; then \
+RUN if [ "$VARIANT" = "fpm" ]; then \
         sed -i 's/try_files \$uri \$uri\//try_files $uri /' /etc/nginx/site-opts.d/http.conf.template; \
+        sed -i 's/try_files \$uri \$uri\//try_files $uri /' /etc/nginx/site-opts.d/https.conf.template; \
     fi
 
 COPY --chmod=755 common/ /
