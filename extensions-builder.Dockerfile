@@ -2,7 +2,7 @@
 
 ARG PHP_VERSION=8.4
 ARG OS_VARIANT=debian
-ARG GRPC_VERSION=1.76.0
+ARG GRPC_VERSION=1.78.0RC2
 
 FROM php:${PHP_VERSION}-alpine AS base_alpine
 FROM php:${PHP_VERSION}-trixie AS base_debian
