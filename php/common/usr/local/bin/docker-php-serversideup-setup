@@ -31,7 +31,7 @@ PHP_EXTENSION_VERSION="${PHP_VERSION}-zts"
 fi
 curl -fsSL -o grpc.so "https://s3.eu-central-1.amazonaws.com/docker-php-assets.keepsuit.com/extensions/${PHP_EXTENSION_VERSION}/${OS}/${TARGETARCH}/grpc-${GRPC_VERSION}.so"
 PHP_EXTENSION_DIR=$(php-config --extension-dir)
-mv grpc-${GRPC_VERSION}.so ${PHP_EXTENSION_DIR}/grpc.so
+mv grpc.so ${PHP_EXTENSION_DIR}/grpc.so
 PHPIZE_DEPS="" docker-php-ext-enable grpc
 
 
