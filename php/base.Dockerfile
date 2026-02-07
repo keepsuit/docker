@@ -27,6 +27,7 @@ RUN install-php-extensions \
     iconv \
     imagick \
     intl \
+    opentelemetry \
     pdo_sqlite \
     phar \
     posix \
