@@ -1,12 +1,12 @@
 # syntax=docker/dockerfile:1
 
 ARG PHP_VERSION=8.4
-ARG IMAGE_VERSION=v4.3.0
+ARG IMAGE_VERSION=v4.3.2
 # Use 'debian' or 'alpine'
 ARG OS=debian
 # Use 'fpm' or 'frankenphp'
 ARG VARIANT=fpm
-ARG SUPERCRONIC_VERSION=v0.2.41
+ARG SUPERCRONIC_VERSION=v0.2.42
 
 FROM serversideup/php:${PHP_VERSION}-fpm-nginx-${OS}-${IMAGE_VERSION} AS base_fpm
 FROM serversideup/php:${PHP_VERSION}-frankenphp-${OS}-${IMAGE_VERSION} AS base_frankenphp
@@ -27,6 +27,7 @@ RUN install-php-extensions \
     iconv \
     imagick \
     intl \
+    opentelemetry \
     pdo_sqlite \
     phar \
     posix \
@@ -72,7 +73,7 @@ ENV PHP_OPCACHE_JIT=on
 ENV PHP_OPCACHE_JIT_BUFFER_SIZE=100M
 ENV PHP_OPCACHE_VALIDATE_TIMESTAMPS=0
 ENV PHP_OPCACHE_INTERNED_STRINGS_BUFFER=16
-ENV PHP_MAX_EXECUTION_TIME=900
+ENV PHP_MAX_EXECUTION_TIME=55
 ENV PHP_MEMORY_LIMIT=512M
 ENV PHP_POST_MAX_SIZE=256M
 ENV PHP_UPLOAD_MAX_FILESIZE=256M

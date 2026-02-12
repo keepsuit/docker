@@ -2,7 +2,7 @@
 
 ARG PHP_VERSION=8.4
 ARG OS_VARIANT=debian
-ARG GRPC_VERSION=1.74.0
+ARG GRPC_VERSION=1.78.0
 
 FROM php:${PHP_VERSION}-alpine AS base_alpine
 FROM php:${PHP_VERSION}-trixie AS base_debian
@@ -13,7 +13,7 @@ ADD --chmod=0755 https://github.com/mlocati/docker-php-extension-installer/relea
 ARG GRPC_VERSION
 RUN install-php-extensions grpc-${GRPC_VERSION}
 RUN mkdir -p /output \
-    && cp -r $(php-config --extension-dir)/grpc.so /output
+    && cp -r $(php-config --extension-dir)/grpc.so /output/grpc-${GRPC_VERSION}.so
 
 FROM scratch
 ARG PHP_VERSION
