@@ -17,7 +17,6 @@ USER root
 
 RUN install-php-extensions \
     bcmath \
-    excimer \
     exif \
     ffi \
     ftp \
