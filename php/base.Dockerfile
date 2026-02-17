@@ -17,25 +17,18 @@ USER root
 
 RUN install-php-extensions \
     bcmath \
-    excimer \
     exif \
     ffi \
     ftp \
     gd \
     gettext \
     gmp \
-    iconv \
     imagick \
     intl \
     opentelemetry \
-    pdo_sqlite \
-    phar \
-    posix \
     protobuf \
-    simplexml \
     soap \
     sockets \
-    sodium \
     sqlite3 \
     xsl \
     uv
@@ -48,8 +41,8 @@ RUN sed -i 's/apt-get install -y \$DEP_PACKAGES/apt-get install -y --no-install-
 # Remove directory serving from nginx config
 ARG VARIANT
 RUN if [ "$VARIANT" = "fpm" ]; then \
-        sed -i 's/try_files \$uri \$uri\//try_files $uri /' /etc/nginx/site-opts.d/http.conf.template; \
-        sed -i 's/try_files \$uri \$uri\//try_files $uri /' /etc/nginx/site-opts.d/https.conf.template; \
+    sed -i 's/try_files \$uri \$uri\//try_files $uri /' /etc/nginx/site-opts.d/http.conf.template; \
+    sed -i 's/try_files \$uri \$uri\//try_files $uri /' /etc/nginx/site-opts.d/https.conf.template; \
     fi
 
 COPY --chmod=755 common/ /
@@ -70,7 +63,7 @@ ENV AUTORUN_LARAVEL_MIGRATION=false
 ENV AUTORUN_LARAVEL_OPTIMIZE=true
 ENV PHP_OPCACHE_ENABLE=1
 ENV PHP_OPCACHE_JIT=on
-ENV PHP_OPCACHE_JIT_BUFFER_SIZE=100M
+ENV PHP_OPCACHE_JIT_BUFFER_SIZE=32M
 ENV PHP_OPCACHE_VALIDATE_TIMESTAMPS=0
 ENV PHP_OPCACHE_INTERNED_STRINGS_BUFFER=16
 ENV PHP_MAX_EXECUTION_TIME=55
