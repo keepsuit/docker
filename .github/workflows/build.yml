@@ -53,7 +53,7 @@ jobs:
           echo "tag=${TAG}" >> $GITHUB_OUTPUT
 
       - name: Build docker image
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: ./php
           file: ./php/base.Dockerfile
@@ -106,7 +106,7 @@ jobs:
           echo "source_tag=${SOURCE_TAG}" >> $GITHUB_OUTPUT
 
       - name: Build docker image
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: ./php
           file: ./php/puppeteer.Dockerfile
@@ -148,7 +148,7 @@ jobs:
   #         password: ${{ secrets.DOCKER_HUB_TOKEN }}
 
   #     - name: Build docker image
-  #       uses: docker/build-push-action@v6
+  #       uses: docker/build-push-action@v7
   #       with:
   #         context: ./laravel-app
   #         file: ./laravel-app/${{ matrix.dockerfile }}
