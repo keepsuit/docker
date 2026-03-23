@@ -34,6 +34,7 @@ RUN install-php-extensions \
     xsl \
     uv
 
+ARG PIE_VERSION
 RUN curl -fL https://github.com/php/pie/releases/download/${PIE_VERSION}/pie.phar -o /usr/local/bin/pie \
     && chmod +x /usr/local/bin/pie \
     && pie -V
