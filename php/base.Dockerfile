@@ -7,6 +7,7 @@ ARG OS=debian
 # Use 'fpm' or 'frankenphp'
 ARG VARIANT=fpm
 ARG SUPERCRONIC_VERSION=v0.2.42
+ARG PIE_VERSION=1.4.0-alpha.1
 
 FROM serversideup/php:${PHP_VERSION}-fpm-nginx-${OS}-${IMAGE_VERSION} AS base_fpm
 FROM serversideup/php:${PHP_VERSION}-frankenphp-${OS}-${IMAGE_VERSION} AS base_frankenphp
@@ -32,6 +33,9 @@ RUN install-php-extensions \
     sqlite3 \
     xsl \
     uv
+
+RUN curl -sS https://github.com/php/pie/releases/download/${PIE_VERSION}/pie.phar -o /usr/local/bin/pie \
+    && chmod +x /usr/local/bin/pie
 
 RUN ln -s $(php-config --extension-dir) /usr/local/lib/php/extensions/current
 
