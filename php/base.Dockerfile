@@ -1,12 +1,13 @@
 # syntax=docker/dockerfile:1
 
 ARG PHP_VERSION=8.4
-ARG IMAGE_VERSION=v4.3.3
+ARG IMAGE_VERSION=v4.4.0
 # Use 'debian' or 'alpine'
 ARG OS=debian
 # Use 'fpm' or 'frankenphp'
 ARG VARIANT=fpm
-ARG SUPERCRONIC_VERSION=v0.2.42
+ARG SUPERCRONIC_VERSION=v0.2.45
+ARG PIE_VERSION=1.4.4
 
 FROM serversideup/php:${PHP_VERSION}-fpm-nginx-${OS}-${IMAGE_VERSION} AS base_fpm
 FROM serversideup/php:${PHP_VERSION}-frankenphp-${OS}-${IMAGE_VERSION} AS base_frankenphp
@@ -32,6 +33,11 @@ RUN install-php-extensions \
     sqlite3 \
     xsl \
     uv
+
+ARG PIE_VERSION
+RUN curl -fL https://github.com/php/pie/releases/download/${PIE_VERSION}/pie.phar -o /usr/local/bin/pie \
+    && chmod +x /usr/local/bin/pie \
+    && pie -V
 
 RUN ln -s $(php-config --extension-dir) /usr/local/lib/php/extensions/current
 
