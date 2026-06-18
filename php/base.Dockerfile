@@ -18,6 +18,7 @@ USER root
 
 RUN install-php-extensions \
     bcmath \
+    calendar \
     exif \
     ffi \
     ftp \
