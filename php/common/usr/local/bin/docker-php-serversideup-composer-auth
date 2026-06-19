@@ -11,3 +11,8 @@ if [ ! -z "$COMPOSER_GITLAB" ]; then
   echo "🔐 Authenticating composer with Gitlab..."
   composer config --global gitlab-token.gitlab.com "$COMPOSER_GITLAB"
 fi
+
+if [ ! -z "$COMPOSER_KEEPSUIT" ]; then
+  echo "🔐 Authenticating composer with Keepsuit..."
+  composer config --global --auth http-basic.composer.keepsuit.com token "$COMPOSER_KEEPSUIT"
+fi
