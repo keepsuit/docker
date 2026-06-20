@@ -5,27 +5,24 @@ set -e
 docker-php-serversideup-dep-install-alpine "bash ffmpeg mysql-client htop"
 docker-php-serversideup-dep-install-debian "ffmpeg htop"
 
-
 # MySQL client doesn't work on alpine
 if [ "$OS" != "alpine" ]; then
-    echo "🤖 Installing MySQL client..."
-    MYSQL_VERSION=8.4.8
+	echo "🤖 Installing MySQL client..."
+	MYSQL_VERSION=8.4.8
 
-    case ${TARGETARCH} in
-        "amd64")  MYSQL_DIR=mysql-${MYSQL_VERSION}-linux-glibc2.28-x86_64-minimal  ;;
-        "arm64")  MYSQL_DIR=mysql-${MYSQL_VERSION}-linux-glibc2.28-aarch64  ;;
-    esac
-    curl -fsSLO https://dev.mysql.com/get/Downloads/MySQL-8.4/${MYSQL_DIR}.tar.xz
-    tar -xf ${MYSQL_DIR}.tar.xz
-    mv ${MYSQL_DIR}/bin/mysqldump /usr/local/bin/mysqldump
-    chmod +x /usr/local/bin/mysqldump
-    rm -rf ${MYSQL_DIR}*
+	case ${TARGETARCH} in
+	"amd64") MYSQL_DIR=mysql-${MYSQL_VERSION}-linux-glibc2.28-x86_64-minimal ;;
+	"arm64") MYSQL_DIR=mysql-${MYSQL_VERSION}-linux-glibc2.28-aarch64 ;;
+	esac
+	curl -fsSLO https://dev.mysql.com/get/Downloads/MySQL-8.4/${MYSQL_DIR}.tar.xz
+	tar -xf ${MYSQL_DIR}.tar.xz
+	mv ${MYSQL_DIR}/bin/mysqldump /usr/local/bin/mysqldump
+	chmod +x /usr/local/bin/mysqldump
+	rm -rf ${MYSQL_DIR}*
 fi
-
 
 echo "🤖 Installing grpc extension..."
 pie install bsn4/grpc
-
 
 echo "🤖 Installing supercronic..."
 curl -fsSL -o supercronic "https://github.com/aptible/supercronic/releases/download/${SUPERCRONIC_VERSION}/supercronic-linux-${TARGETARCH}"

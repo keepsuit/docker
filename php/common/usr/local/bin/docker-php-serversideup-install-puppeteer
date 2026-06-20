@@ -3,15 +3,15 @@
 set -euo pipefail
 
 if [ -f /etc/os-release ]; then
-    # Source the os-release file (including the $NAME variable)
-    . /etc/os-release
+	# Source the os-release file (including the $NAME variable)
+	. /etc/os-release
 else
-    echo "🛑 ERROR ($script_name): Unable to determine the OS."
-    exit 1
+	echo "🛑 ERROR ($script_name): Unable to determine the OS."
+	exit 1
 fi
 
 if [ "$ID" = "debian" ]; then
-curl -fsSL https://deb.nodesource.com/setup_24.x | bash -
+	curl -fsSL https://deb.nodesource.com/setup_24.x | bash -
 fi
 
 docker-php-serversideup-dep-install-alpine "nodejs npm chromium"

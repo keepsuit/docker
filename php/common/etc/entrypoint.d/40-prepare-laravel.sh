@@ -1,18 +1,18 @@
 #!/bin/sh
 
 if [ -f "$APP_BASE_DIR/artisan" ]; then
-    echo "Preparing Laravel application..."
+	echo "Preparing Laravel application..."
 
-    cd $APP_BASE_DIR
+	cd $APP_BASE_DIR
 
-    mkdir -p storage/app/public
-    mkdir -p storage/backups
-    mkdir -p storage/framework/cache
-    mkdir -p storage/framework/sessions
-    mkdir -p storage/framework/views
-    mkdir -p storage/logs
+	mkdir -p storage/app/public
+	mkdir -p storage/backups
+	mkdir -p storage/framework/cache
+	mkdir -p storage/framework/sessions
+	mkdir -p storage/framework/views
+	mkdir -p storage/logs
 
-    chmod -f -R ug+wx storage/app storage/backups storage/framework storage/logs bootstrap
+	chmod -f -R ug+wx storage/app storage/backups storage/framework storage/logs bootstrap
 
-    php artisan package:discover
+	php artisan package:discover
 fi

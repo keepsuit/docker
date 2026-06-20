@@ -6,23 +6,22 @@ APP_BASE_DIR="${APP_BASE_DIR:-/app}"
 SUPERCRONIC="${SUPERCRONIC:-/usr/local/bin/supercronic}"
 SUPERCRONIC_CRONTAB="/tmp/crontab"
 
-
 usage() {
-  echo "Usage: docker-laravel-worker queue|horizon|scheduler|combined [--queue=default] [queue options]" >&2
-  echo "" >&2
-  echo "Queue options: --sleep=N --tries=N --timeout=N --max-time=N --memory=N --backoff=N" >&2
-  exit 64
+	echo "Usage: docker-laravel-worker queue|horizon|scheduler|combined [--queue=default] [queue options]" >&2
+	echo "" >&2
+	echo "Queue options: --sleep=N --tries=N --timeout=N --max-time=N --memory=N --backoff=N" >&2
+	exit 64
 }
 
 require_supercronic() {
-  if [ ! -x "$SUPERCRONIC" ]; then
-    echo "supercronic not found or not executable at: $SUPERCRONIC" >&2
-    exit 70
-  fi
+	if [ ! -x "$SUPERCRONIC" ]; then
+		echo "supercronic not found or not executable at: $SUPERCRONIC" >&2
+		exit 70
+	fi
 }
 
 write_crontab() {
-  cat > "$SUPERCRONIC_CRONTAB" <<EOF
+	cat >"$SUPERCRONIC_CRONTAB" <<EOF
 * * * * * cd "$APP_BASE_DIR" && php artisan schedule:run --no-interaction 2>&1 | grep -v "No scheduled commands are ready to run"
 EOF
 }
@@ -35,85 +34,87 @@ queue="${WORKER_QUEUE:-default}"
 queue_args=""
 
 while [ "$#" -gt 0 ]; do
-  case "$1" in
-    --queue=*)
-      queue="${1#--queue=}"
-      ;;
-    --queue)
-      shift
-      [ "$#" -gt 0 ] || usage
-      queue="$1"
-      ;;
-    --sleep=*|--tries=*|--timeout=*|--max-time=*|--memory=*|--backoff=*)
-      queue_args="$queue_args $1"
-      ;;
-    --sleep|--tries|--timeout|--max-time|--memory|--backoff)
-      opt="$1"
-      shift
-      [ "$#" -gt 0 ] || usage
-      queue_args="$queue_args $opt=$1"
-      ;;
-    *)
-      usage
-      ;;
-  esac
+	case "$1" in
+	--queue=*)
+		queue="${1#--queue=}"
+		;;
+	--queue)
+		shift
+		[ "$#" -gt 0 ] || usage
+		queue="$1"
+		;;
+	--sleep=* | --tries=* | --timeout=* | --max-time=* | --memory=* | --backoff=*)
+		queue_args="$queue_args $1"
+		;;
+	--sleep | --tries | --timeout | --max-time | --memory | --backoff)
+		opt="$1"
+		shift
+		[ "$#" -gt 0 ] || usage
+		queue_args="$queue_args $opt=$1"
+		;;
+	*)
+		usage
+		;;
+	esac
 
-  shift || true
+	shift || true
 done
 
 run_queue() {
-  # shellcheck disable=SC2086
-  exec php artisan queue:work --queue="$queue" $queue_args
+	# shellcheck disable=SC2086
+	exec php artisan queue:work --queue="$queue" $queue_args
 }
 
 run_horizon() {
-  exec php artisan horizon
+	exec php artisan horizon
 }
 
 run_scheduler() {
-  require_supercronic
-  exec "$SUPERCRONIC" -quiet -passthrough-logs "$SUPERCRONIC_CRONTAB"
+	require_supercronic
+	write_crontab
+	exec "$SUPERCRONIC" -quiet -passthrough-logs "$SUPERCRONIC_CRONTAB"
 }
 
 run_combined() {
-  require_supercronic
+	require_supercronic
+	write_crontab
 
-  "$SUPERCRONIC" -quiet -passthrough-logs "$SUPERCRONIC_CRONTAB" &
-  scheduler_pid="$!"
+	"$SUPERCRONIC" -quiet -passthrough-logs "$SUPERCRONIC_CRONTAB" &
+	scheduler_pid="$!"
 
-  # shellcheck disable=SC2086
-  php artisan queue:work --queue="$queue" $queue_args &
-  queue_pid="$!"
+	# shellcheck disable=SC2086
+	php artisan queue:work --queue="$queue" $queue_args &
+	queue_pid="$!"
 
-  terminate() {
-    kill -TERM "$scheduler_pid" "$queue_pid" 2>/dev/null || true
-    wait "$scheduler_pid" 2>/dev/null || true
-    wait "$queue_pid" 2>/dev/null || true
-  }
+	terminate() {
+		kill -TERM "$scheduler_pid" "$queue_pid" 2>/dev/null || true
+		wait "$scheduler_pid" 2>/dev/null || true
+		wait "$queue_pid" 2>/dev/null || true
+	}
 
-  trap 'terminate; exit 143' TERM INT
+	trap 'terminate; exit 143' TERM INT
 
-  while :; do
-    if ! kill -0 "$scheduler_pid" 2>/dev/null; then
-      wait "$scheduler_pid" || status="$?"
-      terminate
-      exit "${status:-1}"
-    fi
+	while :; do
+		if ! kill -0 "$scheduler_pid" 2>/dev/null; then
+			wait "$scheduler_pid" || status="$?"
+			terminate
+			exit "${status:-1}"
+		fi
 
-    if ! kill -0 "$queue_pid" 2>/dev/null; then
-      wait "$queue_pid" || status="$?"
-      terminate
-      exit "${status:-1}"
-    fi
+		if ! kill -0 "$queue_pid" 2>/dev/null; then
+			wait "$queue_pid" || status="$?"
+			terminate
+			exit "${status:-1}"
+		fi
 
-    sleep 1
-  done
+		sleep 1
+	done
 }
 
 case "$mode" in
-  queue) run_queue ;;
-  horizon) run_horizon ;;
-  scheduler) run_scheduler ;;
-  combined) run_combined ;;
-  *) usage ;;
+queue) run_queue ;;
+horizon) run_horizon ;;
+scheduler) run_scheduler ;;
+combined) run_combined ;;
+*) usage ;;
 esac
