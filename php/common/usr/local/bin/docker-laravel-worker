@@ -1,8 +1,11 @@
 #!/usr/bin/env sh
+
 set -eu
 
 APP_BASE_DIR="${APP_BASE_DIR:-/app}"
 SUPERCRONIC="${SUPERCRONIC:-/usr/local/bin/supercronic}"
+SUPERCRONIC_CRONTAB="/tmp/crontab"
+
 
 usage() {
   echo "Usage: docker-laravel-worker queue|horizon|scheduler|combined [--queue=default] [queue options]" >&2
@@ -19,9 +22,7 @@ require_supercronic() {
 }
 
 write_crontab() {
-  crontab="/tmp/crontab"
-
-  cat > "$crontab" <<EOF
+  cat > "$SUPERCRONIC_CRONTAB" <<EOF
 * * * * * cd "$APP_BASE_DIR" && php artisan schedule:run --no-interaction 2>&1 | grep -v "No scheduled commands are ready to run"
 EOF
 }
@@ -71,15 +72,13 @@ run_horizon() {
 
 run_scheduler() {
   require_supercronic
-  crontab="$(write_crontab)"
-  exec "$SUPERCRONIC" -quiet -passthrough-logs "$crontab"
+  exec "$SUPERCRONIC" -quiet -passthrough-logs "$SUPERCRONIC_CRONTAB"
 }
 
 run_combined() {
   require_supercronic
-  crontab="$(write_crontab)"
 
-  "$SUPERCRONIC" -quiet -passthrough-logs "$crontab" &
+  "$SUPERCRONIC" -quiet -passthrough-logs "$SUPERCRONIC_CRONTAB" &
   scheduler_pid="$!"
 
   # shellcheck disable=SC2086
