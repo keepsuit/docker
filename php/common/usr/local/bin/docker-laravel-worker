@@ -6,6 +6,9 @@ APP_BASE_DIR="${APP_BASE_DIR:-/app}"
 SUPERCRONIC="${SUPERCRONIC:-/usr/local/bin/supercronic}"
 SUPERCRONIC_CRONTAB="/tmp/crontab"
 
+# shellcheck source=/usr/local/lib/docker-laravel-scheduler
+. /usr/local/lib/docker-laravel-scheduler
+
 usage() {
 	echo "Usage: docker-laravel-worker queue|horizon|scheduler|combined [--queue=default] [queue options]" >&2
 	echo "" >&2
@@ -21,9 +24,16 @@ require_supercronic() {
 }
 
 write_crontab() {
+	scheduler_command="$(schedule_run_command)"
+
 	cat >"$SUPERCRONIC_CRONTAB" <<EOF
-* * * * * cd "$APP_BASE_DIR" && php artisan schedule:run --no-interaction 2>&1 | grep -v "No scheduled commands are ready to run"
+* * * * * cd "$APP_BASE_DIR" && $scheduler_command
 EOF
+
+	if [ ! -s "$SUPERCRONIC_CRONTAB" ]; then
+		echo "failed to write scheduler crontab at: $SUPERCRONIC_CRONTAB" >&2
+		exit 70
+	fi
 }
 
 mode="${1:-}"
