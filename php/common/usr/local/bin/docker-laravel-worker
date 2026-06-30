@@ -5,9 +5,7 @@ set -eu
 APP_BASE_DIR="${APP_BASE_DIR:-/app}"
 SUPERCRONIC="${SUPERCRONIC:-/usr/local/bin/supercronic}"
 SUPERCRONIC_CRONTAB="/tmp/crontab"
-
-# shellcheck source=/usr/local/lib/docker-laravel-scheduler
-. /usr/local/lib/docker-laravel-scheduler
+SCHEDULE_WHISPER="${SCHEDULE_WHISPER:-auto}"
 
 usage() {
 	echo "Usage: docker-laravel-worker queue|horizon|scheduler|combined [--queue=default] [queue options]" >&2
@@ -21,6 +19,45 @@ require_supercronic() {
 		echo "supercronic not found or not executable at: $SUPERCRONIC" >&2
 		exit 70
 	fi
+}
+
+schedule_run_supports_whisper() {
+	help_output="$(php artisan schedule:run --help 2>/dev/null || true)"
+
+	case "$help_output" in
+	*"--whisper"*) return 0 ;;
+	*) return 1 ;;
+	esac
+}
+
+schedule_run_command() {
+	case "$SCHEDULE_WHISPER" in
+	true)
+		if ! schedule_run_supports_whisper; then
+			echo "php artisan schedule:run does not support --whisper; Laravel >= 12.20 is required" >&2
+			exit 70
+		fi
+
+		echo "php artisan schedule:run --no-interaction --whisper"
+		;;
+
+	false)
+		echo "php artisan schedule:run --no-interaction"
+		;;
+
+	auto)
+		if schedule_run_supports_whisper; then
+			echo "php artisan schedule:run --no-interaction --whisper"
+		else
+			echo "php artisan schedule:run --no-interaction"
+		fi
+		;;
+
+	*)
+		echo "invalid SCHEDULE_WHISPER value: $SCHEDULE_WHISPER; expected auto, true, or false" >&2
+		exit 64
+		;;
+	esac
 }
 
 write_crontab() {
