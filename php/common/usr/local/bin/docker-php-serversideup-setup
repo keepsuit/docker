@@ -28,3 +28,8 @@ echo "🤖 Installing supercronic..."
 curl -fsSL -o supercronic "https://github.com/aptible/supercronic/releases/download/${SUPERCRONIC_VERSION}/supercronic-linux-${TARGETARCH}"
 chmod +x supercronic
 mv supercronic /usr/local/bin/supercronic
+
+echo "🤖 Fixing composer cache permissions..."
+mkdir -p "$COMPOSER_HOME/cache"
+chown -R www-data:www-data "$COMPOSER_HOME"
+chmod -R u+rwX,g+rwX "$COMPOSER_HOME"
