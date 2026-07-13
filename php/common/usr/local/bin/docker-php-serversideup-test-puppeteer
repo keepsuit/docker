@@ -1,0 +1,55 @@
+#!/bin/sh
+
+set -eu
+
+: "${PUPPETEER_EXECUTABLE_PATH:=/usr/bin/chromium}"
+export PUPPETEER_EXECUTABLE_PATH
+
+if [ ! -x "$PUPPETEER_EXECUTABLE_PATH" ]; then
+	echo "Puppeteer smoke test failed: Chromium executable not found at $PUPPETEER_EXECUTABLE_PATH" >&2
+	exit 1
+fi
+
+NODE_PATH="$(npm root -g)"
+export NODE_PATH
+
+workdir="$(mktemp -d "${TMPDIR:-/tmp}/puppeteer-smoke.XXXXXX")"
+trap 'rm -rf "$workdir"' EXIT HUP INT TERM
+
+SMOKE_PDF_PATH="$workdir/smoke.pdf"
+export SMOKE_PDF_PATH
+
+node <<'NODE'
+const puppeteer = require('puppeteer');
+
+(async () => {
+    const browser = await puppeteer.launch({
+        executablePath: process.env.PUPPETEER_EXECUTABLE_PATH,
+        headless: true,
+        args: [
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+            '--disable-dev-shm-usage',
+            '--disable-gpu',
+        ],
+    });
+
+    try {
+        const page = await browser.newPage();
+        await page.setContent('<!doctype html><html><body><h1>Puppeteer smoke test</h1></body></html>');
+        await page.pdf({
+            path: process.env.SMOKE_PDF_PATH,
+            format: 'A4',
+        });
+    } finally {
+        await browser.close();
+    }
+})();
+NODE
+
+if [ ! -s "$SMOKE_PDF_PATH" ]; then
+	echo "Puppeteer smoke test failed: PDF output was not created" >&2
+	exit 1
+fi
+
+echo "Puppeteer smoke test passed"
