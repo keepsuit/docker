@@ -8,7 +8,7 @@ docker-php-serversideup-dep-install-debian "ffmpeg htop"
 # MySQL client doesn't work on alpine
 if [ "$OS" != "alpine" ]; then
 	echo "🤖 Installing MySQL client..."
-	MYSQL_VERSION=8.4.8
+	MYSQL_VERSION=8.4.11
 
 	case ${TARGETARCH} in
 	"amd64") MYSQL_DIR=mysql-${MYSQL_VERSION}-linux-glibc2.28-x86_64-minimal ;;

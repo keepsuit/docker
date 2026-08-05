@@ -1,13 +1,13 @@
 # syntax=docker/dockerfile:1
 
 ARG PHP_VERSION=8.4
-ARG IMAGE_VERSION=v4.4.1
+ARG IMAGE_VERSION=v4.5.1
 # Use 'debian' or 'alpine'
 ARG OS=debian
 # Use 'fpm' or 'frankenphp'
 ARG VARIANT=fpm
-ARG SUPERCRONIC_VERSION=v0.2.46
-ARG PIE_VERSION=1.4.6
+ARG SUPERCRONIC_VERSION=v0.2.48
+ARG PIE_VERSION=1.4.9
 
 FROM serversideup/php:${PHP_VERSION}-fpm-nginx-${OS}-${IMAGE_VERSION} AS base_fpm
 FROM serversideup/php:${PHP_VERSION}-frankenphp-${OS}-${IMAGE_VERSION} AS base_frankenphp
