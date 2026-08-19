@@ -54,6 +54,9 @@ RUN if [ "$VARIANT" = "fpm" ]; then \
 
 COPY --chmod=755 common/ /
 
+# opcache.file_cache needs the directory to exist and be writable
+RUN mkdir -p /var/cache/opcache && chown www-data:www-data /var/cache/opcache
+
 ARG TARGETARCH
 ARG PHP_VERSION
 ARG OS
