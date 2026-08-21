@@ -143,15 +143,27 @@ run_combined() {
 
 	while :; do
 		if ! kill -0 "$scheduler_pid" 2>/dev/null; then
+			status=0
 			wait "$scheduler_pid" || status="$?"
 			terminate
-			exit "${status:-1}"
+			exit "$status"
 		fi
 
 		if ! kill -0 "$queue_pid" 2>/dev/null; then
+			status=0
 			wait "$queue_pid" || status="$?"
-			terminate
-			exit "${status:-1}"
+
+			if [ "$status" -ne 0 ]; then
+				terminate
+				exit "$status"
+			fi
+
+			# queue:work exits 0 when it hits --max-time/--memory; restart it in
+			# place so supercronic keeps ticking instead of losing a schedule
+			# minute to a container restart.
+			# shellcheck disable=SC2086
+			php artisan queue:work --queue="$queue" $queue_args &
+			queue_pid="$!"
 		fi
 
 		sleep 1
