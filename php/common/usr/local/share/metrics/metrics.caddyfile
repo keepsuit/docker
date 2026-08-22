@@ -1,0 +1,9 @@
+# Private metrics listener, installed by /etc/entrypoint.d/50-metrics.sh.
+:8081 {
+	root * /usr/local/share/metrics
+
+	@metrics path /_metrics/queue-size
+	rewrite @metrics /queue-size.php
+
+	php_server
+}
