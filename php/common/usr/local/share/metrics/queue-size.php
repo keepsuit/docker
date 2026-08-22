@@ -50,9 +50,10 @@ try {
     $queues = $split($request->query('queues', []));
 
     if ($connection === null || $queues->isEmpty()) {
-        // Horizon keeps the real queue list in its supervisors, and the
-        // per-environment block overrides the defaults block.
-        $supervisors = config('horizon.environments.'.$app->environment()) ?: config('horizon.defaults') ?: [];
+        // Detect queues from Horizon configuration
+        $supervisors = collect(config('horizon.environments.'.$app->environment()) ?: [])
+            ->map(fn (array $options, string $name) => array_merge(config("horizon.defaults.{$name}", []), $options))
+            ->whenEmpty(fn () => collect(config('horizon.defaults') ?: []));
 
         foreach ($supervisors as $supervisor) {
             $queues = $queues->merge($split($supervisor['queue'] ?? []));
