@@ -47,9 +47,10 @@ try {
         ->values();
 
     $connection = $request->query('connection');
-    $queues = $split($request->query('queues', []));
+    // "queue" is accepted too: it is what artisan and the chart call it.
+    $queues = $split($request->query('queues', $request->query('queue', [])));
 
-    if ($connection === null || $queues->isEmpty()) {
+    if ($queues->isEmpty()) {
         // Detect queues from Horizon configuration
         $supervisors = collect(config('horizon.environments.'.$app->environment()) ?: [])
             ->map(fn (array $options, string $name) => array_merge(config("horizon.defaults.{$name}", []), $options))
