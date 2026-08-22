@@ -1,7 +1,7 @@
 #!/bin/sh
 
 if [ -f "$APP_BASE_DIR/artisan" ]; then
-	echo "Preparing Laravel application..."
+	echo "🤖 Preparing Laravel application..."
 
 	cd $APP_BASE_DIR
 

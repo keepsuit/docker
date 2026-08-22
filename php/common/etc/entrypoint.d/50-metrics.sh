@@ -4,6 +4,8 @@
 
 [ -f "${APP_BASE_DIR:-/app}/artisan" ] || exit 0
 
+echo "📊 Metrics enabled on port 8081"
+
 if command -v nginx >/dev/null 2>&1; then
 	cp /usr/local/share/metrics/nginx.conf /etc/nginx/conf.d/metrics.conf
 elif [ -f /etc/frankenphp/Caddyfile ]; then
