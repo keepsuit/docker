@@ -57,6 +57,10 @@ COPY --chmod=755 common/ /
 # opcache.file_cache needs the directory to exist and be writable
 RUN mkdir -p /var/cache/opcache && chown www-data:www-data /var/cache/opcache
 
+# The entrypoint installs the metrics listener config as www-data at runtime.
+# The nginx variants already chown /etc/nginx, the frankenphp one doesn't.
+RUN if [ -d /etc/frankenphp/caddyfile.d ]; then chown www-data:www-data /etc/frankenphp/caddyfile.d; fi
+
 ARG TARGETARCH
 ARG PHP_VERSION
 ARG OS
