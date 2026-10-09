@@ -1,13 +1,13 @@
 # syntax=docker/dockerfile:1
 
 ARG PHP_VERSION=8.4
-ARG IMAGE_VERSION=v4.5.1
+ARG IMAGE_VERSION=v5.0.0
 # Use 'debian' or 'alpine'
 ARG OS=debian
 # Use 'fpm' or 'frankenphp'
 ARG VARIANT=fpm
-ARG SUPERCRONIC_VERSION=v0.2.48
-ARG PIE_VERSION=1.4.9
+ARG SUPERCRONIC_VERSION=v0.2.49
+ARG PIE_VERSION=1.5.2
 
 FROM serversideup/php:${PHP_VERSION}-fpm-nginx-${OS}-${IMAGE_VERSION} AS base_fpm
 FROM serversideup/php:${PHP_VERSION}-frankenphp-${OS}-${IMAGE_VERSION} AS base_frankenphp
@@ -43,7 +43,7 @@ RUN curl -fL https://github.com/php/pie/releases/download/${PIE_VERSION}/pie.pha
 RUN ln -s $(php-config --extension-dir) /usr/local/lib/php/extensions/current
 
 # Don't install recommended packages to keep image size down
-RUN sed -i 's/apt-get install -y \$DEP_PACKAGES/apt-get install -y --no-install-recommends \$DEP_PACKAGES/g' /usr/local/bin/docker-php-serversideup-dep-install-debian
+RUN sed -i 's/install -y /install -y --no-install-recommends /' /usr/local/bin/docker-php-serversideup-dep-install-debian
 
 # Remove directory serving from nginx config
 ARG VARIANT
@@ -74,12 +74,9 @@ ENV CADDY_SERVER_ROOT=/app/public
 ENV NGINX_WEBROOT=/app/public
 ENV AUTORUN_ENABLED=true
 ENV AUTORUN_LARAVEL_MIGRATION=false
-ENV AUTORUN_LARAVEL_OPTIMIZE=true
 ENV PHP_OPCACHE_ENABLE=1
 # ENV PHP_OPCACHE_JIT=on
 ENV PHP_OPCACHE_JIT_BUFFER_SIZE=32M
-ENV PHP_OPCACHE_VALIDATE_TIMESTAMPS=0
-ENV PHP_OPCACHE_INTERNED_STRINGS_BUFFER=16
 ENV PHP_MAX_EXECUTION_TIME=55
 ENV PHP_MEMORY_LIMIT=512M
 ENV PHP_POST_MAX_SIZE=256M
