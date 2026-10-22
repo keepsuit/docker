@@ -25,15 +25,11 @@ RUN install-php-extensions \
     gd \
     gettext \
     gmp \
-    imagick \
     intl \
-    opentelemetry \
-    protobuf \
     soap \
     sockets \
     sqlite3 \
-    xsl \
-    uv
+    xsl
 
 ARG PIE_VERSION
 RUN curl -fL https://github.com/php/pie/releases/download/${PIE_VERSION}/pie.phar -o /usr/local/bin/pie \
