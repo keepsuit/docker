@@ -21,8 +21,33 @@ if [ "$OS" != "alpine" ]; then
 	rm -rf ${MYSQL_DIR}*
 fi
 
-echo "🤖 Installing grpc extension..."
-pie install bsn4/grpc
+echo "🤖 Installing PIE extensions..."
+# Headers and (on alpine) the toolchain are needed only to compile; the runtime libs are installed explicitly so the purge keeps them.
+if [ "$OS" = "alpine" ]; then
+	apk add --no-cache imagemagick libgomp ghostscript libheif libheif-aom libheif-x265 libjxl libraw librsvg libuv
+	apk add --no-cache --virtual .pie-build-deps $PHPIZE_DEPS imagemagick-dev libuv-dev
+else
+	apt-get update
+	apt-get install -y --no-install-recommends libmagickwand-dev libuv1-dev \
+		'^libmagickwand-7\.q16-[0-9]+$' '^libmagickcore-7\.q16-[0-9]+-extra$' libheif-plugin-aomenc ghostscript libuv1
+fi
+
+# PIE enabling goes through docker-php-ext-enable, whose apk call fails on alpine (nginx repo tag) and leaves a duplicate ini
+pie install --skip-enable-extension bsn4/grpc
+pie install --skip-enable-extension extport/protobuf
+pie install --skip-enable-extension open-telemetry/ext-opentelemetry
+pie install --skip-enable-extension imagick/imagick
+pie install --skip-enable-extension amphp/uv
+for ext in grpc protobuf opentelemetry imagick uv; do
+	echo "extension=$ext" >"$PHP_INI_DIR/conf.d/docker-php-ext-$ext.ini"
+done
+
+if [ "$OS" = "alpine" ]; then
+	apk del .pie-build-deps
+else
+	apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false libmagickwand-dev libuv1-dev
+	rm -rf /var/lib/apt/lists/*
+fi
 
 echo "🤖 Installing supercronic..."
 curl -fsSL -o supercronic "https://github.com/aptible/supercronic/releases/download/${SUPERCRONIC_VERSION}/supercronic-linux-${TARGETARCH}"
