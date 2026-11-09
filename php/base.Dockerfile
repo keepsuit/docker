@@ -7,7 +7,7 @@ ARG OS=debian
 # Use 'fpm' or 'frankenphp'
 ARG VARIANT=fpm
 ARG SUPERCRONIC_VERSION=v0.2.49
-ARG PIE_VERSION=1.5.2
+ARG PIE_VERSION=1.5.5
 
 FROM serversideup/php:${PHP_VERSION}-fpm-nginx-${OS}-${IMAGE_VERSION} AS base_fpm
 FROM serversideup/php:${PHP_VERSION}-frankenphp-${OS}-${IMAGE_VERSION} AS base_frankenphp
