@@ -2,8 +2,13 @@
 
 set -e
 
-docker-php-serversideup-dep-install-alpine "bash ffmpeg mysql-client htop"
-docker-php-serversideup-dep-install-debian "ffmpeg htop"
+docker-php-serversideup-dep-install-alpine "bash ffmpeg mysql-client htop vips font-urw-base35 font-dejavu"
+docker-php-serversideup-dep-install-debian "ffmpeg htop libvips42t64 libheif-plugin-x265"
+
+# Alpine ships the URW aliases (Arial -> Nimbus Sans, ...) disabled, Debian enables them
+if [ "$OS" = "alpine" ]; then
+	ln -sf /usr/share/fontconfig/conf.avail/69-urw-*.conf /etc/fonts/conf.d/
+fi
 
 # MySQL client doesn't work on alpine
 if [ "$OS" != "alpine" ]; then
