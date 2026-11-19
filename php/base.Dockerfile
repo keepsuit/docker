@@ -61,7 +61,8 @@ ARG TARGETARCH
 ARG PHP_VERSION
 ARG OS
 ARG SUPERCRONIC_VERSION
-RUN docker-php-serversideup-setup
+# Authenticated GitHub API calls avoid PIE download failures from anonymous rate limits
+RUN --mount=type=secret,id=composer_auth,env=COMPOSER_AUTH docker-php-serversideup-setup
 
 USER www-data
 WORKDIR /app

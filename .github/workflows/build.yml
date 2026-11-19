@@ -61,6 +61,8 @@ jobs:
             PHP_VERSION=${{ matrix.php }}
             OS=${{ matrix.os }}
             VARIANT=${{ matrix.variant }}
+          secrets: |
+            composer_auth={"github-oauth":{"github.com":"${{ secrets.GITHUB_TOKEN }}"}}
           platforms: linux/amd64,linux/arm64
           cache-from: type=gha,scope=php-${{ steps.prepare_tag.outputs.tag }}
           cache-to: type=gha,scope=php-${{ steps.prepare_tag.outputs.tag }},mode=min
