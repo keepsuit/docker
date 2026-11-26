@@ -54,6 +54,8 @@ RUN if [ "$VARIANT" = "fpm" ]; then \
 
 COPY --chmod=755 common/ /
 
+RUN if [ "$VARIANT" = "fpm" ]; then rm -rf /etc/frankenphp; fi
+
 # opcache.file_cache needs the directory to exist and be writable
 RUN mkdir -p /var/cache/opcache && chown www-data:www-data /var/cache/opcache
 
