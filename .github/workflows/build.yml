@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: ["8.3", "8.4", "8.5"]
+        php: ["8.3", "8.4", "8.5", "8.6"]
         os: ["alpine", "debian"]
         variant: ["fpm", "frankenphp"]
         exclude:
@@ -61,6 +61,8 @@ jobs:
             PHP_VERSION=${{ matrix.php }}
             OS=${{ matrix.os }}
             VARIANT=${{ matrix.variant }}
+          secrets: |
+            composer_auth={"github-oauth":{"github.com":"${{ secrets.GITHUB_TOKEN }}"}}
           platforms: linux/amd64,linux/arm64
           cache-from: type=gha,scope=php-${{ steps.prepare_tag.outputs.tag }}
           cache-to: type=gha,scope=php-${{ steps.prepare_tag.outputs.tag }},mode=min
@@ -73,7 +75,7 @@ jobs:
 
     strategy:
       matrix:
-        php: ["8.3", "8.4", "8.5"]
+        php: ["8.3", "8.4", "8.5", "8.6"]
         variant: ["fpm-debian", "fpm-alpine", "frankenphp-debian"]
 
     steps:
