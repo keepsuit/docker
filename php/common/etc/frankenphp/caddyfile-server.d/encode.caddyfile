@@ -1,0 +1,6 @@
+# Upstream encode keeps the default minimum_length (512), checked against the first write:
+# streamed responses with a small first flush would go out uncompressed.
+@compressible-stream not path /.well-known/mercure
+encode @compressible-stream zstd br gzip {
+	minimum_length 1
+}
